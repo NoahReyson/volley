@@ -162,7 +162,14 @@ function applyStaticI18n(){
   document.querySelectorAll("[data-i18n-title]").forEach(el=>{ const v=T(el.getAttribute("data-i18n-title")); if(v!=null) el.title=v; });
   document.querySelectorAll("[data-i18n-al]").forEach(el=>{ const v=T(el.getAttribute("data-i18n-al")); if(v!=null) el.setAttribute("aria-label",v); });
 }
-function updateSeanceDate(){ try{ const el=document.getElementById("snDate"); if(el) el.textContent=new Date().toLocaleDateString(T('locale'),{weekday:"long",day:"numeric",month:"long",year:"numeric"}); }catch(e){ const el=document.getElementById("snDate"); if(el) el.textContent=new Date().toLocaleDateString(); } }
+function updateSeanceDate(){
+  const el=document.getElementById("snDate"); if(!el) return;
+  try{
+    el.textContent=new Date().toLocaleDateString(T('locale'),{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  }catch(e){
+    el.textContent=new Date().toLocaleDateString();
+  }
+}
 function buildLangSel(){
   const el=document.getElementById("langSel"); if(!el) return;
   el.innerHTML="";

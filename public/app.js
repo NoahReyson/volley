@@ -26,8 +26,22 @@ function loadFavs(){ try{ return new Set(JSON.parse(localStorage.getItem("cv-fav
 function saveFavs(){ try{ localStorage.setItem("cv-favs", JSON.stringify([...favs])); }catch(e){} }
 let favs = loadFavs();
 function isFav(ex){ return favs.has(ex.nom); }
-function updateStar(el,on){ if(!el) return; el.textContent=on?"★":"☆"; el.classList.toggle("on",on); el.setAttribute("aria-pressed",on?"true":"false"); }
-function popFav(el){ if(!el) return; el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); el.addEventListener("animationend",function h(){ el.classList.remove("pop"); el.removeEventListener("animationend",h); }); }
+function updateStar(el,on){
+  if(!el) return;
+  el.textContent = on?"★":"☆";
+  el.classList.toggle("on", on);
+  el.setAttribute("aria-pressed", on?"true":"false");
+}
+function popFav(el){
+  if(!el) return;
+  el.classList.remove("pop");
+  void el.offsetWidth;
+  el.classList.add("pop");
+  el.addEventListener("animationend", function h(){
+    el.classList.remove("pop");
+    el.removeEventListener("animationend", h);
+  });
+}
 function toggleFav(ex,starEl){
   const added = !favs.has(ex.nom);
   if(added) favs.add(ex.nom); else favs.delete(ex.nom);
@@ -232,8 +246,10 @@ function resetFilters(){
 /* =========================================================================
    Filtrage + rendu de la grille
    ========================================================================= */
+// minuscules + suppression des accents (base commune à norm et slugify)
+function deaccent(s){ return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
 // normalise pour la recherche : minuscules, sans accents ni caractères spéciaux
-function norm(s){ return (s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," ").trim(); }
+function norm(s){ return deaccent(s).replace(/[^a-z0-9]+/g," ").trim(); }
 function matches(ex){
   if(state.favOnly && !favs.has(ex.nom)) return false;
   if(state.themes.size && ![...state.themes].some(t=>ex.themes.includes(t))) return false;
@@ -355,7 +371,7 @@ function renderSheet(i){
   currentEx=raw;
 }
 let currentPos = -1; // index dans "filtered"
-function slugify(s){ return (s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,""); }
+function slugify(s){ return deaccent(s).replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,""); }
 function exHash(i){ return "ex-"+slugify(EXERCICES[i].nom); }
 function findByHash(h){
   const m=(h||"").match(/^#ex-(.+)$/); if(!m) return -1;
@@ -373,15 +389,6 @@ function pushAppRoute(route){
 function replaceAppRoute(route){
   const url=location.pathname+location.search+(route?"#"+route:"");
   history.replaceState({volleyApp:true,route,parentRoute:null},"",url);
-}
-function backInApp(fallback){
-  const st=history.state;
-  if(st && st.volleyApp && st.parentRoute!==null && st.parentRoute!==undefined){
-    history.back();
-  }else{
-    fallback();
-    replaceAppRoute(currentRoute());
-  }
 }
 function openExercise(globalIndex, fromHistory=false){
   let pos = filtered.findIndex(o=>o.i===globalIndex);
@@ -447,7 +454,12 @@ function applyView(){
   const ig=document.getElementById("infoGrid"); if(ig) ig.classList.toggle("compact", compactView);
   const hg=document.getElementById("homeGrid"); if(hg) hg.classList.toggle("compact", compactView);
   const vb=document.getElementById("viewBtn");
-  if(vb){ const ic=vb.querySelector(".ic"); if(ic) ic.innerHTML=compactView?ICON_GRID:ICON_LIST; vb.title=compactView?T('view_grid_t'):T('view_list_t'); vb.setAttribute("aria-pressed",compactView?"true":"false"); const l=vb.querySelector(".tb-lbl"); if(l) l.textContent=compactView?T('view_grid'):T('view_list'); }
+  if(vb){
+    const ic=vb.querySelector(".ic"); if(ic) ic.innerHTML = compactView?ICON_GRID:ICON_LIST;
+    vb.title = compactView?T('view_grid_t'):T('view_list_t');
+    vb.setAttribute("aria-pressed", compactView?"true":"false");
+    const l=vb.querySelector(".tb-lbl"); if(l) l.textContent = compactView?T('view_grid'):T('view_list');
+  }
 }
 function initView(){
   applyView();
@@ -532,7 +544,10 @@ function initAuth(){
 }
 
 /* ---- menu latéral d'outils (burger, téléphone) ---- */
-function closeTools(){ document.body.classList.remove("tools-open"); const b=document.getElementById("burgerBtn"); if(b) b.setAttribute("aria-expanded","false"); }
+function closeTools(){
+  document.body.classList.remove("tools-open");
+  const b=document.getElementById("burgerBtn"); if(b) b.setAttribute("aria-expanded","false");
+}
 function toggleTools(){
   const open=document.body.classList.toggle("tools-open");
   document.getElementById("burgerBtn").setAttribute("aria-expanded", open?"true":"false");
@@ -577,7 +592,9 @@ function renderSeanceList(){
   });
 }
 function updateSeanceStats(){
-  const n=seance.length; let dur=0; seance.forEach(nom=>{const ex=EXERCICES.find(e=>e.nom===nom); if(ex) dur+=ex.duree;});
+  const n=seance.length;
+  let dur=0;
+  seance.forEach(nom=>{ const ex=EXERCICES.find(e=>e.nom===nom); if(ex) dur+=ex.duree; });
   const c=document.getElementById("snCount"); if(c) c.textContent=T('ex_count')(n);
   const d=document.getElementById("snDur"); if(d) d.textContent=dur+" "+T('min');
   const badge=document.getElementById("snBadge"); if(badge){ badge.textContent=n; badge.style.display=n>0?"":"none"; }
@@ -622,8 +639,17 @@ const HOME_LINKS=[
   {key:"lexique", desc:"Le vocabulaire du volley, de A à Z."},
   {key:"outils", desc:"Des outils pratiques pour l'entraînement."}
 ];
-function updateNavLabel(){ const sec=document.body.dataset.section||"exercices"; const el=document.getElementById("navselLabel"); if(el) el.textContent=(sec==="recherche"?T('search_title'):sectionLabel(sec)); setActiveNav(sec); }
-function setActiveNav(sec){ document.querySelectorAll(".navbtn").forEach(b=>b.classList.remove("active")); const id=sec==="exercices"?"seg-ex":"seg-"+sec; const el=document.getElementById(id); if(el) el.classList.add("active"); }
+function updateNavLabel(){
+  const sec=document.body.dataset.section||"exercices";
+  const el=document.getElementById("navselLabel");
+  if(el) el.textContent = sec==="recherche" ? T('search_title') : sectionLabel(sec);
+  setActiveNav(sec);
+}
+function setActiveNav(sec){
+  document.querySelectorAll(".navbtn").forEach(b=>b.classList.remove("active"));
+  const id = sec==="exercices" ? "seg-ex" : "seg-"+sec;
+  const el=document.getElementById(id); if(el) el.classList.add("active");
+}
 let curSection="exercices", curInfoIdx=-1;
 function renderInfoList(key){
   const sec=infoMeta(key);
@@ -748,7 +774,10 @@ function initCompo(){
   btnR.addEventListener("click",()=>{ COMPO=compoDefaults(); draw(); });
   draw();
 }
-function compoToSvg(svg,cx,cy){ const pt=svg.createSVGPoint(); pt.x=cx; pt.y=cy; return pt.matrixTransform(svg.getScreenCTM().inverse()); }
+function compoToSvg(svg,cx,cy){
+  const pt=svg.createSVGPoint(); pt.x=cx; pt.y=cy;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
+}
 function addCompoPlayer(svg, pl){
   const NS="http://www.w3.org/2000/svg";
   const g=document.createElementNS(NS,"g"); g.setAttribute("class","compo-pl"+(pl.lib?" lib":"")+(pl.side==="B"?" adv":""));
@@ -829,9 +858,14 @@ function infoBack(){
 }
 function infoGo(d){ const items=INFO[curSection].items; const n=curInfoIdx+d; if(n<0||n>=items.length) return; openInfo(curSection,n); }
 function goExercices(fromHistory=false){
-  document.body.dataset.section="exercices"; delete document.body.dataset.iview; delete document.body.dataset.tool;
-  updateNavLabel(); document.body.dataset.view="list"; render();
-  if(!fromHistory) pushAppRoute("exercices"); window.scrollTo(0,0);
+  document.body.dataset.section="exercices";
+  delete document.body.dataset.iview;
+  delete document.body.dataset.tool;
+  updateNavLabel();
+  document.body.dataset.view="list";
+  render();
+  if(!fromHistory) pushAppRoute("exercices");
+  window.scrollTo(0,0);
 }
 /* ---- page d'accueil (accès via le logo, pas dans la navbar) ---- */
 function renderHome(){
