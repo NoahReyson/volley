@@ -1,7 +1,7 @@
 # Carnet Volley — document de référence du projet
 
 > Document de cadrage pour reprendre l'app dans Claude Code et la transformer en
-> projet hébergé sur GitLab Pages, avec séparation des fichiers.
+> projet hébergé sur GitHub Pages, avec séparation des fichiers.
 > Rédigé le 2026-11-12.
 
 ---
@@ -67,11 +67,11 @@ Public : usage personnel / partage d'équipe. Le contenu n'est pas sensible.
 
 ---
 
-## 3. Transformation en projet GitLab Pages
+## 3. Transformation en projet GitHub Pages
 
 ### But
-Héberger l'app sur **GitLab Pages** : statique, gratuit, HTTPS, pas de limite de
-« projet actif », pas d'écran de preview.
+Héberger l'app sur **GitHub Pages** : statique, gratuit, servi en HTTPS sur un
+sous-domaine `github.io` (domaine personnalisé possible).
 
 ### Structure cible du dépôt
 ```
@@ -82,32 +82,50 @@ Héberger l'app sur **GitLab Pages** : statique, gratuit, HTTPS, pas de limite d
 │   ├── data.js
 │   ├── i18n.js
 │   └── app.js
-├── .gitlab-ci.yml
+├── .github/
+│   └── workflows/
+│       └── pages.yml     # déploiement GitHub Pages
 └── README.md             # (ce document peut en être la base)
 ```
-*(Tant que l'app reste en un seul fichier, `public/` ne contient que
-`index.html` ; la décomposition ci-dessus est la cible du §4.)*
+*(Le découpage ci-dessus est fait : voir le §4.)*
 
-### `.gitlab-ci.yml`
+### `.github/workflows/pages.yml`
 ```yaml
-pages:
-  stage: deploy
-  script:
-    - echo "Fichier statique, rien à construire"
-  artifacts:
-    paths:
-      - public
-  publish: public
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - id: deployment
+        uses: actions/deploy-pages@v4
 ```
-À chaque push sur la branche par défaut, le contenu de `public/` est publié sur
-`https://<utilisateur>.gitlab.io/<projet>/` (domaine personnalisé possible).
+À faire une seule fois : **Settings → Pages → Source = « GitHub Actions »**.
+Ensuite, à chaque push sur `main`, le contenu de `public/` est publié sur
+`https://<utilisateur>.github.io/<projet>/` (domaine personnalisé possible).
 
 ### Sécurité / confidentialité — à décider
-- **Pages est public par défaut, même si le dépôt est privé** (l'URL `gitlab.io`
-  est ouverte à tous). Pour exiger une connexion GitLab : activer **Pages Access
-  Control**.
+- **GitHub Pages est public sur un dépôt public** (l'URL `github.io` est ouverte
+  à tous). Pour restreindre l'accès : dépôt privé avec *Pages* en accès contrôlé
+  (fonction payante selon le plan).
 - Rappel : l'« auth » de l'app ne protège rien. Ne jamais y mettre de contenu
   réellement sensible.
 
@@ -186,10 +204,10 @@ app.js          # la logique (rendu, routing, recherche, outils, favoris, séanc
   et l'app retombe sur les polices système (prévu).
 - Commits par petits lots thématiques (un commit « split CSS », un commit
   « extraction data.js », etc.).
-- La CI Pages se déclenche au push sur la branche par défaut ; vérifier le job
-  `pages` dans l'onglet CI/CD.
+- Le workflow Pages se déclenche au push sur `main` ; suivre l'exécution dans
+  l'onglet **Actions**.
 - Ordre de migration conseillé :
-  1. Créer le dépôt + `.gitlab-ci.yml`, déployer l'app telle quelle dans
+  1. Créer le dépôt + `.github/workflows/pages.yml`, déployer l'app telle quelle dans
      `public/index.html` (valider que Pages fonctionne).
   2. Extraire `styles.css`.
   3. Extraire `data.js` (données FR, globales).
@@ -197,4 +215,4 @@ app.js          # la logique (rendu, routing, recherche, outils, favoris, séanc
      `app.js` à la logique applicative.
   5. (Plus tard) découpage de `data.js` par domaine si besoin.
   À chaque étape : ouvrir `index.html` en local (`file://`) et vérifier FR + EN ;
-  le rendu « en ligne » se valide sur l'URL GitLab Pages après push.
+  le rendu « en ligne » se valide sur l'URL GitHub Pages après push.
