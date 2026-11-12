@@ -1,0 +1,10 @@
+pages:
+  stage: deploy
+  script:
+    - echo "Fichier statique, rien à construire"
+  artifacts:
+    paths:
+      - public
+  publish: public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
