@@ -433,15 +433,31 @@ function backToList(){
 /* =========================================================================
    Thème clair/sombre
    ========================================================================= */
+/* 3 modes cycliques : auto (suit le périphérique) -> clair -> sombre.
+   "auto" = absence de data-theme : le CSS retombe sur prefers-color-scheme,
+   donc le thème suit le système en direct, même s'il change pendant l'usage. */
+const ICON_THEME_AUTO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>';
+const ICON_THEME_LIGHT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>';
+const ICON_THEME_DARK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+const THEME_MODES=["auto","light","dark"];
+const THEME_ICONS={auto:ICON_THEME_AUTO, light:ICON_THEME_LIGHT, dark:ICON_THEME_DARK};
+let themeMode=(function(){ try{ const s=localStorage.getItem("cv-theme"); return THEME_MODES.includes(s)?s:"auto"; }catch(e){ return "auto"; } })();
+function themeModeLabel(m){ return T('theme_'+m); }
+function applyThemeMode(){
+  if(themeMode==="auto") delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme=themeMode;
+  const btn=document.getElementById("themeBtn"); if(!btn) return;
+  const ic=btn.querySelector(".ic"); if(ic) ic.innerHTML=THEME_ICONS[themeMode];
+  const l=btn.querySelector(".tb-lbl"); if(l) l.textContent=themeModeLabel(themeMode);
+  const desc=T('theme')+" : "+themeModeLabel(themeMode);
+  btn.title=desc; btn.setAttribute("aria-label",desc);
+}
 function initTheme(){
-  let saved=null; try{ saved=localStorage.getItem("cv-theme"); }catch(e){}
-  if(saved) document.documentElement.dataset.theme=saved;
+  applyThemeMode();
   document.getElementById("themeBtn").addEventListener("click",()=>{
-    const cur=document.documentElement.dataset.theme;
-    const dark=cur? cur==="dark" : matchMedia("(prefers-color-scheme:dark)").matches;
-    const next=dark?"light":"dark";
-    document.documentElement.dataset.theme=next;
-    try{ localStorage.setItem("cv-theme",next); }catch(e){}
+    themeMode=THEME_MODES[(THEME_MODES.indexOf(themeMode)+1)%THEME_MODES.length];
+    try{ localStorage.setItem("cv-theme",themeMode); }catch(e){}
+    applyThemeMode();
   });
 }
 

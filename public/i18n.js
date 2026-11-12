@@ -23,6 +23,7 @@ const UI={
   seance_empty:"Aucun exercice dans la séance.<br>Ajoute-les depuis les cartes ou les fiches.",
   view:"Vue", view_list:"Vue liste", view_grid:"Vue grille", view_list_t:"Vue liste compacte", view_grid_t:"Vue grille",
   theme:"Thème", theme_t:"Thème clair / sombre",
+  theme_auto:"Auto", theme_light:"Clair", theme_dark:"Sombre",
   login:"Connexion", logout:"Déconnexion", login_t:"Se connecter", logout_t:"Se déconnecter",
   menu:"Menu", lang_t:"Langue",
   search_ph:"Rechercher…", search_page_ph:"Rechercher dans tout le carnet…", search_title:"Recherche",
@@ -68,6 +69,7 @@ const UI={
   seance_empty:"No drills in the session yet.<br>Add them from the cards or the detail pages.",
   view:"View", view_list:"List view", view_grid:"Grid view", view_list_t:"Compact list view", view_grid_t:"Grid view",
   theme:"Theme", theme_t:"Light / dark theme",
+  theme_auto:"Auto", theme_light:"Light", theme_dark:"Dark",
   login:"Log in", logout:"Log out", login_t:"Log in", logout_t:"Log out",
   menu:"Menu", lang_t:"Language",
   search_ph:"Search…", search_page_ph:"Search the whole notebook…", search_title:"Search",
@@ -195,7 +197,7 @@ function applyLang(){
   document.documentElement.lang=LANG;
   applyStaticI18n();
   buildFilters();
-  applyView(); applyAuth();
+  applyView(); applyAuth(); applyThemeMode();
   updateLangSel();
   renderHome(); renderSeanceList(); updateSeanceStats(); updateSeanceDate();
   rerenderCurrent();
