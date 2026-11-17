@@ -1555,6 +1555,90 @@ const EXERCICES = [
       {type:"label",x:4.5,y:8.5,label:"2"},
       {type:"label",x:8.5,y:2,label:"3"}
     ]}
+  },
+  {
+    nom:"1-2-3 retour",
+    themes:["Passe","Physique"], niveau:"Intermédiaire", joueurs:{min:2,max:12}, duree:10,
+    materiel:"1 ballon pour 2",
+    objectif:"Travailler la passe haute sur soi en reculant, puis la longue passe précise vers un partenaire : enchaîner déplacement arrière et transmission.",
+    deroule:[
+      "Le joueur 1 démarre sur la ligne des 3 m, ballon en main.",
+      "En 3 touches de passe haute sur lui-même, il recule jusqu'au fond du terrain (environ une touche tous les 2 m).",
+      "Arrivé au fond, il se retourne et fait une longue passe précise vers le joueur 2, qui attend sur la ligne des 3 m.",
+      "Le joueur 2 enchaîne le même parcours ; rotation continue."
+    ],
+    consignes:["Passe haute stable, jouée devant le front","Reculer en pas chassés, sans croiser les appuis","Longue passe gainée : trajectoire haute et tendue vers la cible"],
+    variantes:["Plus dur : le joueur 2 attaque le joueur 1 juste après la longue passe, qui doit défendre","Plus facile : 4 touches pour atteindre le fond, ou réduire la distance"],
+    schema:{terrain:"half",elements:[
+      {type:"player",x:3,y:3,team:"A",label:"1"},
+      {type:"arrow",x:3,y:3.3,x2:3,y2:8,kind:"move"},
+      {type:"arrow",x:3.3,y:8,x2:5.7,y2:3.2,kind:"pass"},
+      {type:"player",x:6,y:3,team:"B",label:"2"}
+    ]}
+  },
+  {
+    nom:"Contrôle foot",
+    themes:["Échauffement","Physique"], niveau:"Débutant", joueurs:{min:2,max:16}, duree:5,
+    materiel:"1 ballon pour 2",
+    objectif:"Échauffer en douceur et travailler la coordination et les appuis : contrôle et passe au pied, pour dissocier le haut et le bas du corps.",
+    deroule:[
+      "Par deux, face à face à 4-6 m, un ballon au sol.",
+      "S'échanger le ballon en le faisant rouler : contrôle du pied, puis passe de l'intérieur du pied.",
+      "Alterner pied droit et pied gauche, garder le ballon vivant.",
+      "Avancer et reculer pour contrôler en mouvement."
+    ],
+    consignes:["Contrôle amorti, cheville souple","Regard sur le ballon puis sur la cible avant de passer","Rester sur des appuis dynamiques, genoux fléchis"],
+    variantes:["Plus dur : un seul contact, passe directe sans contrôle","Plus dur : augmenter la distance et la vitesse d'échange","Plus facile : contrôle autorisé en deux ou trois touches"],
+    schema:{terrain:"half",elements:[
+      {type:"player",x:3,y:4,team:"A",label:"1"},
+      {type:"player",x:6,y:4,team:"B",label:"2"},
+      {type:"ball",x:4.5,y:4},
+      {type:"arrow",x:3.4,y:3.6,x2:5.6,y2:3.6,kind:"move"},
+      {type:"arrow",x:5.6,y:4.4,x2:3.4,y2:4.4,kind:"move"}
+    ]}
+  },
+  {
+    nom:"Manchette roulée",
+    themes:["Réception","Défense"], niveau:"Intermédiaire", joueurs:{min:2,max:12}, duree:10,
+    materiel:"2 ballons pour 2 joueurs",
+    objectif:"Relâcher et former le plan de manchette dans un seul mouvement continu : pousser une balle au sol et manchetter la suivante d'un même geste.",
+    deroule:[
+      "Le joueur 1 est en position de réception, bras tendus, les deux mains posées sur une balle au sol devant lui.",
+      "Le joueur 2, à 4-5 m, lui envoie une seconde balle (lancer franc) vers sa zone de manchette.",
+      "Au moment où la balle arrive, le joueur 1 fait rouler la 1re balle vers le joueur 2, puis enchaîne immédiatement une manchette sur la 2e balle.",
+      "La poussée de la 1re balle et la manchette ne forment qu'un seul mouvement."
+    ],
+    consignes:["Bras déjà formés en plan, épaules vers la cible","Pousser la balle au sol et remonter les bras d'un seul tenant","Jouer la balle devant soi, l'impulsion vient des jambes"],
+    variantes:["Plus dur : varier la hauteur et la vitesse de la balle lancée","Plus facile : annoncer et ralentir le lancer, laisser plus de temps entre les deux balles"],
+    schema:{terrain:"half",elements:[
+      {type:"player",x:3.5,y:6,team:"A",label:"1"},
+      {type:"ball",x:3.5,y:6.8},
+      {type:"player",x:6,y:3,team:"B",label:"2"},
+      {type:"arrow",x:5.8,y:3.3,x2:3.9,y2:5.7,kind:"ball"},
+      {type:"arrow",x:3.6,y:6.6,x2:5.8,y2:3.5,kind:"move"}
+    ]}
+  },
+  {
+    nom:"Réception après saut",
+    themes:["Réception","Physique"], niveau:"Confirmé", joueurs:{min:2,max:10}, duree:10,
+    materiel:"2 cerceaux, des ballons",
+    objectif:"Enchaîner un effort physique et une réception : se replacer et réceptionner juste après un déséquilibre, comme après un bloc ou un déplacement.",
+    deroule:[
+      "Poser 2 cerceaux l'un derrière l'autre.",
+      "Le joueur 1 saute à pieds joints dans le 1er cerceau, puis dans le 2e, à la suite.",
+      "À l'instant où il arrive dans le 2e cerceau, le joueur 2 déclenche une attaque que le joueur 1 doit réceptionner.",
+      "4 à 5 répétitions, puis rotation."
+    ],
+    consignes:["Sortir du cerceau en position basse, bras déjà prêts","Réception amortie malgré le déséquilibre du saut","Viser une cible de passe (zone 2-3)"],
+    variantes:["Plus dur : attaque plus forte, ou cible de réception imposée","Plus facile : balle lancée haute au lieu d'une attaque, ou un seul cerceau"],
+    schema:{terrain:"half",elements:[
+      {type:"zone",x:3.8,y:5.3,w:1.2,h:1.2},
+      {type:"zone",x:3.8,y:3.9,w:1.2,h:1.2},
+      {type:"player",x:4.4,y:6.7,team:"A",label:"1"},
+      {type:"arrow",x:4.4,y:6.5,x2:4.4,y2:4.3,kind:"move"},
+      {type:"player",x:6,y:1.6,team:"B",label:"2"},
+      {type:"arrow",x:5.8,y:1.9,x2:4.6,y2:4.4,kind:"ball"}
+    ]}
   }
 ];
 

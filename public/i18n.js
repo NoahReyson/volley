@@ -1389,6 +1389,22 @@ CONTENT_EN.exercices={
  "Parcours de réceptions":{nom:"Reception circuit", materiel:"Several balls, 1 setter", objectif:"Link three receptions on fast footwork (zones 4, 6, 2), returning cleanly to the central setter each time.",
   deroule:["A setter stands at position 3 (centre, near the net). The other players, each with a ball, wait behind position 5.","A waiting player sends their ball to the setter, who sends it first to zone 4 (short), then to zone 6, then to zone 2.","The working player moves very fast to link the three receptions in order and return each one to the central setter.","The setter moves as little as possible; link the cycle, then the next player takes over."],
   consignes:["Always return high and clean to the central setter.","Reset fast between each ball: footwork speed and balance before the contact.","The setter stays fixed in the centre: it is the player who runs, not the target."],
-  variantes:["Harder: some of the setter's deliveries are attacks (not tossed balls) to raise the difficulty.","Easier: reduce to two zones, or leave more time between balls."]}
+  variantes:["Harder: some of the setter's deliveries are attacks (not tossed balls) to raise the difficulty.","Easier: reduce to two zones, or leave more time between balls."]},
+ "1-2-3 retour":{nom:"1-2-3 and back", materiel:"1 ball per 2", objectif:"Work the overhead pass to yourself while moving back, then the accurate long set to a partner: link the backward movement with the delivery.",
+  deroule:["Player 1 starts on the 3 m line, ball in hand.","In 3 overhead passes to themselves, they move back to the end line (about one touch every 2 m).","At the back, they turn and make an accurate long set to player 2, who waits on the 3 m line.","Player 2 runs the same course; continuous rotation."],
+  consignes:["Stable overhead pass, played in front of the forehead","Move back with shuffle steps, without crossing the feet","Braced long set: high, driven trajectory toward the target"],
+  variantes:["Harder: player 2 attacks player 1 right after the long set, who must dig it","Easier: 4 touches to reach the back, or reduce the distance"]},
+ "Contrôle foot":{nom:"Foot control", materiel:"1 ball per 2", objectif:"Warm up gently and work coordination and footwork: control and pass with the foot, to dissociate the upper and lower body.",
+  deroule:["In pairs, facing each other at 4-6 m, a ball on the floor.","Exchange the ball by rolling it: control with the foot, then pass with the inside of the foot.","Alternate right and left foot, keep the ball alive.","Step forward and back to control on the move."],
+  consignes:["Cushioned control, loose ankle","Look at the ball then at the target before passing","Stay on dynamic feet, knees bent"],
+  variantes:["Harder: a single contact, direct pass without control","Harder: increase the distance and the exchange speed","Easier: control allowed in two or three touches"]},
+ "Manchette roulée":{nom:"Rolled forearm pass", materiel:"2 balls per 2 players", objectif:"Relax and form the forearm platform in one continuous movement: push a ball along the floor and dig the next one with the same motion.",
+  deroule:["Player 1 is in a reception stance, arms out, both hands resting on a ball on the floor in front of them.","Player 2, 4-5 m away, sends a second ball (clean toss) toward their passing zone.","As the ball arrives, player 1 rolls the first ball to player 2, then immediately links a forearm pass on the second ball.","The push of the first ball and the forearm pass form a single movement."],
+  consignes:["Arms already formed as a platform, shoulders toward the target","Push the ball along the floor and raise the arms in one piece","Play the ball in front of you, the drive comes from the legs"],
+  variantes:["Harder: vary the height and speed of the tossed ball","Easier: call and slow the toss, leave more time between the two balls"]},
+ "Réception après saut":{nom:"Reception after a jump", materiel:"2 hoops, balls", objectif:"Link a physical effort with a reception: reposition and pass just after being off balance, like after a block or a move.",
+  deroule:["Place 2 hoops one behind the other.","Player 1 jumps with feet together into the first hoop, then the second, in a row.","The moment they land in the second hoop, player 2 launches an attack that player 1 must receive.","4 to 5 reps, then rotate."],
+  consignes:["Come out of the hoop low, arms already ready","Cushioned reception despite the jump's imbalance","Aim at a setting target (zone 2-3)"],
+  variantes:["Harder: a stronger attack, or a required reception target","Easier: a ball tossed high instead of an attack, or a single hoop"]}
 };
 /* ===EN_NEXT=== */
