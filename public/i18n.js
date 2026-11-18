@@ -1405,6 +1405,10 @@ CONTENT_EN.exercices={
  "Réception après saut":{nom:"Reception after a jump", materiel:"2 hoops, balls", objectif:"Link a physical effort with a reception: reposition and pass just after being off balance, like after a block or a move.",
   deroule:["Place 2 hoops one behind the other.","Player 1 jumps with feet together into the first hoop, then the second, in a row.","The moment they land in the second hoop, player 2 launches an attack that player 1 must receive.","4 to 5 reps, then rotate."],
   consignes:["Come out of the hoop low, arms already ready","Cushioned reception despite the jump's imbalance","Aim at a setting target (zone 2-3)"],
-  variantes:["Harder: a stronger attack, or a required reception target","Easier: a ball tossed high instead of an attack, or a single hoop"]}
+  variantes:["Harder: a stronger attack, or a required reception target","Easier: a ball tossed high instead of an attack, or a single hoop"]},
+ "Course au renvoi":{nom:"Running return", materiel:"A basket of balls", objectif:"Work on movement speed and returning on the run: start from the back of the court to chase a short ball near the net.",
+  deroule:["Split the players into 2 groups, in columns behind the end line.","The coach, at the net with a basket of balls, sends a ball toward the net, into one of the 2 zones facing the groups.","The first player of each column sprints to reach the ball and send it back over the net.","Chain the tosses at a fast pace, then rotate to the back of the column."],
+  consignes:["Explosive start on the toss, run as direct as possible","Finish low to play the short ball","Controlled return over the net, not hit hard"],
+  variantes:["Harder: tosses closer together, or balls shorter near the net","Easier: a ball tossed higher and slower, a single column"]}
 };
 /* ===EN_NEXT=== */

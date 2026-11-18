@@ -1639,6 +1639,31 @@ const EXERCICES = [
       {type:"player",x:6,y:1.6,team:"B",label:"2"},
       {type:"arrow",x:5.8,y:1.9,x2:4.6,y2:4.4,kind:"ball"}
     ]}
+  },
+  {
+    nom:"Course au renvoi",
+    themes:["Physique","Défense"], niveau:"Intermédiaire", joueurs:{min:4,max:16}, duree:8,
+    materiel:"Un panier de ballons",
+    objectif:"Travailler la vitesse de déplacement et le renvoi en course : partir du fond de terrain pour aller chercher une balle courte près du filet.",
+    deroule:[
+      "Répartir les joueurs en 2 groupes, en colonne derrière la ligne de fond.",
+      "Le coach, au filet avec un panier de ballons, envoie une balle vers le filet, dans l'une des 2 zones face aux groupes.",
+      "Le premier de chaque colonne sprinte pour atteindre la balle et la renvoyer par-dessus le filet.",
+      "Enchaîner les lancers à un rythme rapide, puis rotation en fin de colonne."
+    ],
+    consignes:["Départ explosif dès le lancer, course la plus directe possible","Finir en position basse pour jouer la balle courte","Renvoi contrôlé par-dessus le filet, pas en force"],
+    variantes:["Plus dur : lancers plus rapprochés, ou balles plus courtes près du filet","Plus facile : balle lancée plus haut et plus lente, une seule colonne"],
+    schema:{terrain:"half",elements:[
+      {type:"player",x:4.5,y:0.6,team:"B",label:"C"},
+      {type:"zone",x:2.0,y:1.5,w:1.2,h:1.2},
+      {type:"zone",x:5.8,y:1.5,w:1.2,h:1.2},
+      {type:"arrow",x:4.3,y:0.9,x2:2.9,y2:2.0,kind:"ball"},
+      {type:"arrow",x:4.7,y:0.9,x2:6.1,y2:2.0,kind:"ball"},
+      {type:"player",x:2.6,y:8.5,team:"A",label:"1"},
+      {type:"player",x:6.4,y:8.5,team:"A",label:"2"},
+      {type:"arrow",x:2.6,y:8.2,x2:2.6,y2:2.8,kind:"move"},
+      {type:"arrow",x:6.4,y:8.2,x2:6.4,y2:2.8,kind:"move"}
+    ]}
   }
 ];
 
