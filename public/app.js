@@ -60,12 +60,9 @@ function courtSVG(schema, mini){
   const W=9, L=wall?6.5:half?9:18, pad=1.1;
   const vb=`0 0 ${W+pad*2} ${L+pad*2}`;
   const o=p=>p+pad;                // offset
+  // sérialise un chemin animé en coords offset ; 3e valeur = 1 si le point est « non-stop »
+  const pathData=pts=>esc(JSON.stringify(pts.map(p=>{const a=[+o(p.x).toFixed(3),+o(p.y).toFixed(3)];if(p.nonstop)a.push(1);return a;})));
   let s=`<svg viewBox="${vb}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Schéma de l'exercice"${mini===false?' class="sch-anim"':''}>`;
-  // defs flèches
-  s+=`<defs>
-    <marker id="ah" markerWidth="5" markerHeight="5" refX="3.6" refY="2.5" orient="auto"><path d="M0,0 L4.5,2.5 L0,5 z" class="sch-arrowhead"/></marker>
-    <marker id="ahb" markerWidth="5" markerHeight="5" refX="3.6" refY="2.5" orient="auto"><path d="M0,0 L4.5,2.5 L0,5 z" class="sch-arrowhead ball"/></marker>
-  </defs>`;
   // sol + zones permanentes
   s+=`<rect x="${o(0)}" y="${o(0)}" width="${W}" height="${L}" rx="0.25" class="court-floor"/>`;
   // lignes d'attaque + filet
@@ -90,21 +87,23 @@ function courtSVG(schema, mini){
       s+=`<rect x="${o(e.x)}" y="${o(e.y)}" width="${e.w}" height="${e.h}" rx="0.15" class="sch-zone"/>`;
     }
   }
-  for(const e of (schema.elements||[])){
-    if(e.type==="arrow"){
-      const cls = e.kind==="ball"?"sch-arrow ball":e.kind==="pass"?"sch-arrow pass":"sch-arrow move";
-      const mk = e.kind==="ball"?"url(#ahb)":"url(#ah)";
-      s+=`<line x1="${o(e.x)}" y1="${o(e.y)}" x2="${o(e.x2)}" y2="${o(e.y2)}" class="${cls}" marker-end="${mk}"/>`;
+  // trajectoires (guides) des éléments animés — seulement en vue détail
+  if(!mini) for(const e of (schema.elements||[])){
+    if((e.type==="player"||e.type==="ball") && e.path && e.path.length>1){
+      const d=e.path.map((p,i)=>(i?"L":"M")+o(p.x).toFixed(2)+" "+o(p.y).toFixed(2)).join(" ")+(e.loop?" Z":"");
+      s+=`<path d="${d}" class="sch-trail"/>`;
+      for(const p of e.path) s+=`<circle cx="${o(p.x)}" cy="${o(p.y)}" r="0.1" class="sch-trail-dot"/>`;
     }
   }
   for(const e of (schema.elements||[])){
     if(e.type==="player"){
-      const cls = e.team==="B"?"pl pl-b":e.team==="C"?"pl pl-c":"pl pl-a";
-      s+=`<g class="${cls}"><circle cx="${o(e.x)}" cy="${o(e.y)}" r="0.52"/>`;
-      if(e.label&&!mini) s+=`<text x="${o(e.x)}" y="${o(e.y)}" class="pl-label">${esc(e.label)}</text>`;
+      const base = e.team==="B"?"pl pl-b":e.team==="C"?"pl pl-c":"pl pl-a";
+      const p0 = (e.path&&e.path.length)?e.path[0]:e;
+      const mv = !mini && e.path && e.path.length>1;
+      const dp = mv?` data-path="${pathData(e.path)}"${e.loop?' data-loop="1"':''}`:"";
+      s+=`<g class="${base}${mv?" sch-move":""}"${dp}><circle cx="${o(p0.x)}" cy="${o(p0.y)}" r="0.52"/>`;
+      if(e.label&&!mini) s+=`<text x="${o(p0.x)}" y="${o(p0.y)}" class="pl-label">${esc(e.label)}</text>`;
       s+=`</g>`;
-    }else if(e.type==="ball"){
-      s+=`<circle cx="${o(e.x)}" cy="${o(e.y)}" r="0.3" class="sch-ball"/>`;
     }else if(e.type==="cone"){
       const x=o(e.x),y=o(e.y);
       s+=`<path d="M${x} ${y-0.42} L${x+0.37} ${y+0.3} L${x-0.37} ${y+0.3} Z" class="sch-cone"/>`;
@@ -114,19 +113,28 @@ function courtSVG(schema, mini){
       s+=`<text x="${o(e.x)}" y="${o(e.y)}" class="sch-text">${esc(e.label)}</text>`;
     }
   }
+  // ballons rendus en dernier → toujours au-dessus des joueurs
+  for(const e of (schema.elements||[])){
+    if(e.type==="ball"){
+      const b0=(e.path&&e.path.length)?e.path[0]:e;
+      const mv=!mini && e.path && e.path.length>1;
+      const dp=mv?` data-path="${pathData(e.path)}"${e.loop?' data-loop="1"':''}`:"";
+      s+=`<circle cx="${o(b0.x)}" cy="${o(b0.y)}" r="0.3" class="sch-ball${mv?" sch-move":""}"${dp}/>`;
+    }
+  }
   s+=`</svg>`;
   return s;
 }
 
 /* Animation « construction » du schéma à l'ouverture d'une fiche de détail.
    Le décor (sol, lignes, filet, zones) reste fixe ; les joueurs/ballon/plots
-   apparaissent en pop, puis les flèches se tracent une à une. Purement visuel,
-   désactivé si prefers-reduced-motion. Rien à traduire. */
+   apparaissent en pop. Purement visuel, désactivé si prefers-reduced-motion.
+   Rien à traduire. */
 function animateSchema(scope){
   if(!scope) return;
   try{ if(matchMedia("(prefers-reduced-motion: reduce)").matches) return; }catch(e){}
   scope.querySelectorAll("svg.sch-anim").forEach(svg=>{
-    // 1) pop-in des pions (joueurs, ballon, plots, cerceaux)
+    // pop-in des pions (joueurs, ballon, plots, cerceaux)
     const pops=svg.querySelectorAll(".pl, .sch-ball, .sch-cone, .sch-hoop");
     pops.forEach((el,i)=>{
       el.style.transformBox="fill-box"; el.style.transformOrigin="center";
@@ -136,28 +144,78 @@ function animateSchema(scope){
         el.style.opacity=""; el.style.transform="";
       }, 50+i*45);
     });
-    const popDone=50+pops.length*45;
-    // 2) tracé progressif des flèches, puis restauration du style d'origine
-    svg.querySelectorAll(".sch-arrow").forEach((ln,i)=>{
-      let len=0; try{ len=ln.getTotalLength(); }catch(e){ len=0; }
-      if(!len) return;
-      const mk=ln.getAttribute("marker-end");
-      ln.style.transition="none";
-      ln.style.strokeDasharray=len; ln.style.strokeDashoffset=len;
-      if(mk) ln.setAttribute("marker-end","none");   // cacher la pointe pendant le tracé
-      void ln.getBoundingClientRect();                // forcer un reflow
-      setTimeout(()=>{
-        ln.style.transition="stroke-dashoffset .4s ease";
-        ln.style.strokeDashoffset="0";
-        const restore=()=>{
-          ln.removeEventListener("transitionend",restore);
-          ln.style.transition=""; ln.style.strokeDasharray=""; ln.style.strokeDashoffset="";
-          if(mk) ln.setAttribute("marker-end",mk);     // rendre pointe + pointillés d'origine
-        };
-        ln.addEventListener("transitionend",restore);
-        setTimeout(restore,600);                        // filet de sécurité
-      }, popDone+i*120);
+  });
+}
+
+/* Animation de déplacement : les joueurs/ballons munis d'un `path` glissent
+   d'une position à l'autre, tous sur la même horloge pour rester synchronisés.
+   Timing (cf. demande) : 1 s d'attente au départ, 1 s de glissement par segment,
+   0,5 s de freeze à chaque point intermédiaire, 1 s d'attente à l'arrivée, puis
+   retour « téléportation » au départ (wrap de l'horloge) et boucle.
+   Désactivé si prefers-reduced-motion (reste figé sur la position de départ). */
+const SCH_HOLD=1000, SCH_MOVE=1000, SCH_FREEZE=500;
+let schMotionSeq=0;
+function schSample(kf, t){
+  for(let i=1;i<kf.length;i++){
+    if(t<=kf[i].t){
+      const a=kf[i-1], b=kf[i], span=b.t-a.t, f=span>0?(t-a.t)/span:0;
+      return [a.p[0]+(b.p[0]-a.p[0])*f, a.p[1]+(b.p[1]-a.p[1])*f];
+    }
+  }
+  const last=kf[kf.length-1].p; return [last[0], last[1]];
+}
+function startSchemaMotion(scope){
+  if(!scope) return;
+  try{ if(matchMedia("(prefers-reduced-motion: reduce)").matches) return; }catch(e){}
+  scope.querySelectorAll("svg.sch-anim").forEach(svg=>{
+    const movers=[...svg.querySelectorAll(".sch-move")].map(el=>{
+      let pts=null; try{ pts=JSON.parse(el.getAttribute("data-path")); }catch(e){}
+      return {el, pts, loop: el.getAttribute("data-loop")==="1"};
+    }).filter(m=>m.pts && m.pts.length>1);
+    if(!movers.length) return;
+    // Chaque élément a SA propre période : un chemin plus court ne patiente pas pour
+    // s'aligner sur le plus long, il reboucle aussitôt. Tous partent à t0 (les
+    // sous-mouvements d'1 s démarrent donc ensemble). Un point « non-stop »
+    // (pts[i][2]===1) saute le freeze (0,5 s intermédiaire) ou l'attente (1 s début/fin).
+    // loop : pas de téléportation fin→départ ; segment de fermeture fluide, et départ
+    // comme arrivée deviennent de simples points intermédiaires (freeze 0,5 s).
+    movers.forEach(m=>{
+      const pts=m.pts, M=pts.length-1, ns=i=>pts[i][2]===1;
+      const kf=[{t:0,p:pts[0]}];
+      let t;
+      if(m.loop){
+        t=ns(0)?0:SCH_FREEZE;
+        if(t>0) kf.push({t,p:pts[0]});
+        for(let k=0;k<M;k++){
+          t+=SCH_MOVE; kf.push({t,p:pts[k+1]});
+          const dwell=ns(k+1)?0:SCH_FREEZE;
+          if(dwell>0){ t+=dwell; kf.push({t,p:pts[k+1]}); }
+        }
+        t+=SCH_MOVE; kf.push({t,p:pts[0]});   // fermeture : retour fluide au départ
+      }else{
+        t=ns(0)?0:SCH_HOLD;
+        if(t>0) kf.push({t,p:pts[0]});
+        for(let k=0;k<M;k++){
+          t+=SCH_MOVE; kf.push({t,p:pts[k+1]});
+          const dwell=(k+1===M)?(ns(M)?0:SCH_HOLD):(ns(k+1)?0:SCH_FREEZE);
+          if(dwell>0){ t+=dwell; kf.push({t,p:pts[k+1]}); }
+        }
+      }
+      m.kf=kf; m.T=t||SCH_MOVE; m.x0=pts[0][0]; m.y0=pts[0][1];
     });
+    const id=String(++schMotionSeq);
+    svg.dataset.motion=id;
+    const t0=performance.now();
+    const frame=now=>{
+      if(!document.contains(svg) || svg.dataset.motion!==id) return;   // arrêt propre
+      const el=now - t0;
+      movers.forEach(m=>{
+        const [x,y]=schSample(m.kf, el % m.T);
+        m.el.setAttribute("transform", `translate(${(x-m.x0).toFixed(3)} ${(y-m.y0).toFixed(3)})`);
+      });
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
   });
 }
 
@@ -179,12 +237,9 @@ svg .pl-label{fill:#fff;font-family:var(--f-head);font-weight:700;font-size:.62p
 svg .sch-ball{fill:var(--ball);stroke:#8a6a00;stroke-width:.05}
 svg .sch-cone{fill:var(--accent)}
 svg .sch-hoop{fill:none;stroke:var(--accent);stroke-width:.13}
-svg .sch-arrow{fill:none;stroke-width:.11}
-svg .sch-arrow.move{stroke:var(--fg)}
-svg .sch-arrow.pass{stroke:var(--blue);stroke-dasharray:.35 .22}
-svg .sch-arrow.ball{stroke:var(--ball);stroke-dasharray:.35 .22}
-svg .sch-arrowhead{fill:var(--fg)}
-svg .sch-arrowhead.ball{fill:var(--ball)}
+svg .sch-trail{fill:none;stroke:var(--fg);stroke-width:.06;stroke-dasharray:.16 .18;opacity:.3}
+svg .sch-trail-dot{fill:var(--fg);opacity:.3}
+svg .sch-move{will-change:transform}
 svg .sch-text{fill:var(--fg);font-family:var(--f-body);font-weight:600;font-size:.6px;text-anchor:middle;dominant-baseline:central}
 `;
 document.head.appendChild(svgStyle);
@@ -345,8 +400,6 @@ function renderSheet(i){
           <span><span class="lg-dot" style="background:var(--teamB)"></span>${esc(T('legend_b'))}</span>
           ${(raw.schema&&raw.schema.elements&&raw.schema.elements.some(e=>e.team==="C"))?`<span><span class="lg-dot" style="background:var(--teamC)"></span>${esc(T('legend_c'))}</span>`:""}
           <span><span class="lg-dot" style="background:var(--ball)"></span>${esc(T('legend_ball'))}</span>
-          <span><span class="lg-line"></span>${esc(T('legend_move'))}</span>
-          <span><span class="lg-line dash"></span>${esc(T('legend_traj'))}</span>
         </div>
       </div>
       <div class="sheet-info">
@@ -362,6 +415,7 @@ function renderSheet(i){
       </div>
     </div>`;
   animateSchema(sheet);
+  startSchemaMotion(sheet);
   const sf=sheet.querySelector("#sheetFav");
   updateStar(sf, isFav(raw));
   sf.addEventListener("click",()=>toggleFav(raw,sf));
@@ -992,6 +1046,7 @@ function renderInfoDetail(key,i){
       ${it.blocks.map(block).join("")}
     </div>`;
   animateSchema(sheet);
+  startSchemaMotion(sheet);
   if(addable){ const ia=sheet.querySelector("#infoAdd"); if(ia){ updateInfoAddBtn(ia,key,it0.nom); ia.addEventListener("click",()=>addTheorieToSeance(key,it0.nom)); } }
   document.getElementById("infoBack").textContent="← "+sec.back;
   document.getElementById("infoPos").textContent=`${i+1} / ${sec.items.length}`;

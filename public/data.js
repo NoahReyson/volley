@@ -23,12 +23,12 @@ const EXERCICES = [
     consignes:["Genoux fléchis, poids sur l'avant des pieds","Ballon joué devant le front en passe haute","Épaules vers la cible en manchette"],
     variantes:["Plus dur : un seul contact imposé et distance augmentée","Plus facile : laisser rebondir une fois au sol"],
     schema:{terrain:"half",elements:[
-      {type:"player",x:2,y:3,team:"A",label:"1"},
-      {type:"player",x:6,y:3,team:"B",label:"2"},
-      {type:"arrow",x:2.5,y:3,x2:5.5,y2:3,kind:"ball"},
-      {type:"player",x:2,y:6,team:"A",label:"3"},
-      {type:"player",x:6,y:6,team:"B",label:"4"},
-      {type:"arrow",x:2.5,y:6,x2:5.5,y2:6,kind:"ball"}
+      {type:"player",team:"A",label:"1",x:2,y:3},
+      {type:"player",team:"B",label:"2",x:6,y:3},
+      {type:"player",team:"A",label:"3",x:2,y:6},
+      {type:"player",team:"B",label:"4",x:6,y:6},
+      {type:"ball",path:[{x:2.5,y:3},{x:5.5,y:3}],loop:true},
+      {type:"ball",path:[{x:2.5,y:6},{x:5.5,y:6}],loop:true}
     ]}
   },
   {
@@ -45,10 +45,9 @@ const EXERCICES = [
     consignes:["Attaque dosée, bras cassé mais sans puissance","Se replacer sous le ballon avant chaque touche","Communiquer à chaque relance"],
     variantes:["Plus dur : imposer une attaque en recul ou sautée","Plus facile : autoriser 4 touches","Par-dessus le filet : les deux joueurs se font face de part et d'autre du filet, attaque contrôlée par-dessus (possible à 2 contre 2)","Côté contre côté : en diagonale par-dessus le filet, le défenseur relève pour un passeur qui remet à l'attaquant (enchaînement coopératif)"],
     schema:{terrain:"half",elements:[
-      {type:"player",x:3,y:2.5,team:"A",label:"A"},
-      {type:"player",x:6,y:6.5,team:"B",label:"B"},
-      {type:"arrow",x:3.3,y:2.8,x2:5.7,y2:6.2,kind:"ball"},
-      {type:"arrow",x:5.7,y:6.2,x2:3.3,y2:2.8,kind:"pass"}
+      {type:"player",team:"A",label:"A",x:3,y:2.5},
+      {type:"player",team:"B",label:"B",x:6,y:6.5},
+      {type:"ball",path:[{x:3.3,y:2.8},{x:5.7,y:6.2}],loop:true}
     ]}
   },
   {
@@ -65,15 +64,14 @@ const EXERCICES = [
     consignes:["Lancer bas et stable, devant l'épaule porteuse","Frapper au centre du ballon, poignet ferme (pas d'effet)","Transfert du poids arrière vers avant"],
     variantes:["Plus dur : cibles réduites, servir en zone courte puis longue en alternance","Plus dur : viser les couloirs et le fond du terrain","Plus facile : servir depuis 6 m et viser des moitiés de terrain","Concours : premier à toucher 5 cibles, ou morpion sur 9 zones"],
     schema:{terrain:"full",elements:[
-      {type:"player",x:4.5,y:17,team:"A",label:"S"},
-      {type:"ball",x:3.8,y:16.5},
+      {type:"player",team:"A",label:"S",x:4.5,y:17},
+      {type:"ball",path:[{x:4.5,y:16.5},{x:1.5,y:1.6}]},
       {type:"zone",x:0,y:0,w:3,h:3},
       {type:"zone",x:3,y:0,w:3,h:3},
       {type:"zone",x:6,y:0,w:3,h:3},
-      {type:"label",x:1.5,y:1.5,label:"Z5"},
-      {type:"label",x:4.5,y:1.5,label:"Z6"},
-      {type:"label",x:7.5,y:1.5,label:"Z1"},
-      {type:"arrow",x:4.5,y:16.5,x2:1.5,y2:1.6,kind:"ball"}
+      {type:"label",label:"Z5",x:1.5,y:1.5},
+      {type:"label",label:"Z6",x:4.5,y:1.5},
+      {type:"label",label:"Z1",x:7.5,y:1.5}
     ]}
   },
   {
@@ -90,16 +88,14 @@ const EXERCICES = [
     consignes:["Ne pas regarder son service partir : entrer tout de suite","Position basse, bras prêts avant la frappe adverse","Le service est au service de la tâche : priorité à la sécurité"],
     variantes:["Plus dur : ajouter une couverture après la défense","Plus facile : attaque adverse annoncée et dosée"],
     schema:{terrain:"full",elements:[
-      {type:"player",x:7,y:17,team:"A",label:"S"},
-      {type:"ball",x:7.8,y:16.8},
-      {type:"arrow",x:7,y:16.5,x2:1.5,y2:2,kind:"ball"},
-      {type:"arrow",x:6.9,y:16.4,x2:6,y2:13.3,kind:"move"},
-      {type:"player",x:6,y:13,team:"A",label:"D"},
-      {type:"player",x:4.5,y:3,team:"B",label:"★"},
-      {type:"arrow",x:4.5,y:3.5,x2:6,y2:12.6,kind:"ball"},
-      {type:"label",x:3.3,y:9,label:"1 · service"},
-      {type:"label",x:8,y:14.7,label:"2 · entrée"},
-      {type:"label",x:3.9,y:11.4,label:"3 · défend"}
+      {type:"player",team:"A",label:"S",path:[{x:7,y:17},{x:6,y:13.3},{x:7,y:17}]},
+      {type:"ball",path:[{x:7,y:16.5},{x:1.5,y:2}]},
+      {type:"player",team:"A",label:"D",x:6,y:13},
+      {type:"player",team:"B",label:"★",x:4.5,y:3},
+      {type:"label",label:"1 · service",x:3.3,y:9},
+      {type:"label",label:"2 · entrée",x:8,y:14.7},
+      {type:"label",label:"3 · défend",x:3.9,y:11.4},
+      {type:"ball",path:[{x:4.5,y:3.5},{x:6,y:12.6}]}
     ]}
   },
   {
@@ -116,15 +112,13 @@ const EXERCICES = [
     consignes:["Partager le terrain : chacun sa zone, le ballon entre deux appartient au plus proche de la cible","Avancer vers le ballon, ne pas reculer sur les pieds","Plateau de manchette orienté vers le passeur"],
     variantes:["Plus dur : service sauté / flottant alterné","Plus facile : réception à 4 ou service lifté"],
     schema:{terrain:"full",elements:[
-      {type:"player",x:4.5,y:0,team:"B",label:"S"},
-      {type:"ball",x:3.8,y:0.3},
-      {type:"player",x:2,y:13,team:"A",label:"5"},
-      {type:"player",x:7,y:13,team:"A",label:"1"},
-      {type:"player",x:4.5,y:15,team:"A",label:"6"},
+      {type:"player",team:"B",label:"S",x:4.5,y:0},
+      {type:"ball",path:[{x:4.5,y:0.5},{x:2.2,y:12.7},{x:6.1,y:10.4}]},
+      {type:"player",team:"A",label:"5",x:2,y:13},
+      {type:"player",team:"A",label:"1",x:7,y:13},
+      {type:"player",team:"A",label:"6",x:4.5,y:15},
       {type:"zone",x:5,y:9.6,w:2.8,h:1.3},
-      {type:"label",x:6.4,y:10.2,label:"cible"},
-      {type:"arrow",x:4.5,y:0.5,x2:2.2,y2:12.7,kind:"ball"},
-      {type:"arrow",x:2.2,y:12.7,x2:6.1,y2:10.4,kind:"pass"}
+      {type:"label",label:"cible",x:6.4,y:10.2}
     ]}
   },
   {
@@ -141,17 +135,12 @@ const EXERCICES = [
     consignes:["Receveur : viser haut et au-dessus de la cible pour laisser le temps au passeur","Passeur : être arrêté et équilibré avant la passe","Lire l'épaule du serveur pour anticiper la zone"],
     variantes:["Plus dur : passeur qui sort de réception, 2 options d'attaque","Plus facile : passeur déjà en place"],
     schema:{terrain:"full",elements:[
-      {type:"player",x:4.5,y:1.5,team:"B",label:"S"},
-      {type:"ball",x:3.8,y:1.3},
-      {type:"player",x:3,y:12.5,team:"A",label:"R"},
-      {type:"player",x:6.5,y:12.5,team:"A",label:"R"},
-      {type:"player",x:6.6,y:10.3,team:"A",label:"P"},
-      {type:"arrow",x:7.6,y:13.3,x2:6.8,y2:10.6,kind:"move"},
-      {type:"player",x:1.8,y:10.3,team:"A",label:"4"},
-      {type:"arrow",x:4.5,y:2,x2:3,y2:12.2,kind:"ball"},
-      {type:"arrow",x:3,y:12.2,x2:6.5,y2:10.5,kind:"pass"},
-      {type:"arrow",x:6.5,y:10.5,x2:2,y2:10.4,kind:"pass"},
-      {type:"arrow",x:1.8,y:10,x2:7,y2:2.5,kind:"ball"}
+      {type:"player",team:"B",label:"S",x:4.5,y:1.5},
+      {type:"ball",path:[{x:4.5,y:2},{x:3,y:12.2},{x:6.5,y:10.5},{x:2,y:10.4},{x:7,y:2.5}]},
+      {type:"player",team:"A",label:"R",x:3,y:12.5},
+      {type:"player",team:"A",label:"R",path:[{x:6.5,y:12.5},{x:6.8,y:10.6},{x:6.5,y:12.5}]},
+      {type:"player",team:"A",label:"P",x:6.6,y:10.3},
+      {type:"player",team:"A",label:"4",x:1.8,y:10.3}
     ]}
   },
   {
@@ -168,15 +157,14 @@ const EXERCICES = [
     consignes:["Épaules carrées vers l'avant, le dos ne trahit pas la passe arrière","Mains au-dessus du front, poussée symétrique","Se replacer après chaque relance de l'entraîneur"],
     variantes:["Plus dur : ajouter la passe en suspension","Plus facile : relances régulières au même endroit"],
     schema:{terrain:"half",elements:[
-      {type:"player",x:6.5,y:3,team:"A",label:"P"},
-      {type:"label",x:4.5,y:7,label:"Lancer"},
-      {type:"arrow",x:4.5,y:6.4,x2:6.4,y2:3.3,kind:"ball"},
+      {type:"player",team:"A",label:"P",x:6.5,y:3},
+      {type:"label",label:"Lancer",x:4.5,y:7},
       {type:"zone",x:0.4,y:0.3,w:1.6,h:1.2},
       {type:"zone",x:7,y:0.3,w:1.6,h:1.2},
-      {type:"label",x:1.2,y:0.9,label:"Z4"},
-      {type:"label",x:7.8,y:0.9,label:"Z2"},
-      {type:"arrow",x:6.5,y:2.7,x2:1.2,y2:1,kind:"pass"},
-      {type:"arrow",x:6.5,y:2.7,x2:7.8,y2:1.1,kind:"pass"}
+      {type:"label",label:"Z4",x:1.2,y:0.9},
+      {type:"label",label:"Z2",x:7.8,y:0.9},
+      {type:"ball",path:[{x:4.5,y:6.4},{x:6.4,y:3.3},{x:1.2,y:1}]},
+      {type:"ball",path:[{x:6.5,y:2.7},{x:7.8,y:1.1}]}
     ]}
   },
   {
@@ -193,13 +181,11 @@ const EXERCICES = [
     consignes:["Attendre, puis déclencher l'élan quand le ballon quitte les mains du passeur","Armer haut, coude au-dessus de l'épaule","Frapper au-dessus et devant, finir le geste vers la cible"],
     variantes:["Plus dur : ajouter un bloc passif puis actif","Plus facile : passeur qui pose un ballon haut et lent"],
     schema:{terrain:"full",elements:[
-      {type:"player",x:1.8,y:11,team:"A",label:"4"},
-      {type:"arrow",x:1.8,y:10.6,x2:1.8,y2:9.6,kind:"move"},
-      {type:"player",x:4.5,y:10,team:"A",label:"P"},
-      {type:"arrow",x:4.5,y:10,x2:2,y2:9.3,kind:"pass"},
-      {type:"arrow",x:1.8,y:9.2,x2:7.5,y2:3,kind:"ball"},
+      {type:"player",team:"A",label:"4",path:[{x:1.8,y:11},{x:1.8,y:9.6},{x:1.8,y:11}]},
+      {type:"player",team:"A",label:"P",x:4.5,y:10},
       {type:"zone",x:6,y:0,w:3,h:3},
-      {type:"label",x:7.5,y:1.5,label:"Cible"}
+      {type:"label",label:"Cible",x:7.5,y:1.5},
+      {type:"ball",path:[{x:4.5,y:10},{x:2,y:9.3},{x:7.5,y:3}]}
     ]}
   },
   {
@@ -216,14 +202,13 @@ const EXERCICES = [
     consignes:["Couverture basse et proche, dès l'armé de l'attaquant","Ne pas admirer son attaque : enchaîner la tâche suivante","Communication constante sur le ballon contré"],
     variantes:["Plus dur : bloc actif + défenseurs arrière adverses","Plus facile : bloc passif, attaque libre","Plus court : se concentrer sur la seule couverture en demi-terrain, sans repli","Couverture imposée à deux lignes (proche et lointaine)"],
     schema:{terrain:"full",elements:[
-      {type:"player",x:1.8,y:11,team:"A",label:"4"},
-      {type:"player",x:3.5,y:12.5,team:"A",label:"C"},
-      {type:"player",x:5,y:12.5,team:"A",label:"C"},
-      {type:"player",x:3.5,y:14,team:"A",label:"C"},
-      {type:"player",x:2,y:8,team:"B",label:"B"},
-      {type:"player",x:3.2,y:8,team:"B",label:"B"},
-      {type:"arrow",x:1.8,y:10.5,x2:2.5,y2:8.5,kind:"ball"},
-      {type:"arrow",x:2.5,y:8.5,x2:3.5,y2:11.8,kind:"ball"}
+      {type:"player",team:"A",label:"4",x:1.8,y:11},
+      {type:"player",team:"A",label:"C",x:3.5,y:12.5},
+      {type:"player",team:"A",label:"C",x:5,y:12.5},
+      {type:"player",team:"A",label:"C",x:3.5,y:14},
+      {type:"player",team:"B",label:"B",x:2,y:8},
+      {type:"player",team:"B",label:"B",x:3.2,y:8},
+      {type:"ball",path:[{x:1.8,y:10.5},{x:2.5,y:8.5},{x:3.5,y:11.8}]}
     ]}
   },
   {
@@ -240,15 +225,13 @@ const EXERCICES = [
     consignes:["L'ailier donne la position, le central s'ajuste à lui","Fermer l'espace entre les deux paires de mains","Bloquer la diagonale, laisser la ligne au défenseur"],
     variantes:["Plus dur : passeur qui varie zone 4 / zone 2 sans annonce","Plus facile : attaque uniquement en zone 4"],
     schema:{terrain:"full",elements:[
-      {type:"player",x:3,y:9.9,team:"A",label:"4"},
-      {type:"player",x:4.4,y:9.9,team:"A",label:"C"},
-      {type:"arrow",x:4.4,y:9.9,x2:3.3,y2:9.9,kind:"move"},
-      {type:"player",x:2,y:6,team:"B",label:"A"},
-      {type:"player",x:6,y:7.6,team:"B",label:"P"},
-      {type:"arrow",x:5.8,y:7.6,x2:2.3,y2:6.3,kind:"pass"},
-      {type:"arrow",x:2.1,y:6.3,x2:3.3,y2:9.6,kind:"ball"},
-      {type:"player",x:7,y:12.5,team:"A",label:"D"},
-      {type:"label",x:5.6,y:12.5,label:"ligne"}
+      {type:"player",team:"A",label:"4",x:3,y:9.9},
+      {type:"player",team:"A",label:"C",path:[{x:4.4,y:9.9},{x:3.3,y:9.9},{x:4.4,y:9.9}]},
+      {type:"player",team:"B",label:"A",x:2,y:6},
+      {type:"player",team:"B",label:"P",x:6,y:7.6},
+      {type:"player",team:"A",label:"D",x:7,y:12.5},
+      {type:"label",label:"ligne",x:5.6,y:12.5},
+      {type:"ball",path:[{x:5.8,y:7.6},{x:2.3,y:6.3},{x:3.3,y:9.6}]}
     ]}
   },
   {
@@ -265,13 +248,13 @@ const EXERCICES = [
     consignes:["Arrêté au moment de la frappe, poids vers l'avant","Bras tendus devant, ne pas balancer les bras","Toujours un joueur prêt à avancer sur l'amorti"],
     variantes:["Plus dur : ajouter un 3e défenseur et des attaques en zone 2","Plus facile : seulement des balles dosées en diagonale"],
     schema:{terrain:"full",elements:[
-      {type:"player",x:1.8,y:8,team:"B",label:"B"},
-      {type:"player",x:7.5,y:14,team:"A",label:"5"},
-      {type:"player",x:4.5,y:15,team:"A",label:"6"},
-      {type:"player",x:4.5,y:4,team:"B",label:"★"},
-      {type:"arrow",x:4.5,y:4.4,x2:7.3,y2:13.6,kind:"ball"},
-      {type:"arrow",x:4.5,y:4.4,x2:3.5,y2:11,kind:"ball"},
-      {type:"label",x:3,y:11.4,label:"amorti"}
+      {type:"player",team:"B",label:"B",x:1.8,y:8},
+      {type:"player",team:"A",label:"5",x:7.5,y:14},
+      {type:"player",team:"A",label:"6",x:4.5,y:15},
+      {type:"player",team:"B",label:"★",x:4.5,y:4},
+      {type:"label",label:"amorti",x:3,y:11.4},
+      {type:"ball",path:[{x:4.5,y:4.4},{x:7.3,y:13.6}]},
+      {type:"ball",path:[{x:4.5,y:4.4},{x:3.5,y:11}]}
     ]}
   },
   {
@@ -288,13 +271,11 @@ const EXERCICES = [
     consignes:["Avancer bas vers le ballon avant de plonger","Ne jamais retomber sur les poignets ni les coudes tendus","Relever le ballon haut, même en déséquilibre"],
     variantes:["Plus dur : départ dos tourné, signal sonore","Plus facile : balles lancées plus près et plus hautes"],
     schema:{terrain:"half",elements:[
-      {type:"player",x:4.5,y:4.5,team:"A",label:"D"},
-      {type:"label",x:4.5,y:7,label:"Lancer"},
-      {type:"arrow",x:4.5,y:6.6,x2:1.5,y2:5,kind:"ball"},
-      {type:"arrow",x:4.5,y:6.6,x2:7.5,y2:5,kind:"ball"},
-      {type:"arrow",x:4.5,y:6.6,x2:3,y2:2,kind:"ball"},
-      {type:"arrow",x:4.5,y:4.2,x2:1.8,y2:4.6,kind:"move"},
-      {type:"arrow",x:4.5,y:4.2,x2:7.2,y2:4.6,kind:"move"}
+      {type:"player",team:"A",label:"D",path:[{x:4.5,y:4.5},{x:1.8,y:4.6},{x:4.5,y:4.5},{x:7.2,y:4.6},{x:4.5,y:4.5}]},
+      {type:"label",label:"Lancer",x:4.5,y:7},
+      {type:"ball",path:[{x:4.5,y:6.6},{x:1.5,y:5}]},
+      {type:"ball",path:[{x:4.5,y:6.6},{x:7.5,y:5}]},
+      {type:"ball",path:[{x:4.5,y:6.6},{x:3,y:2}]}
     ]}
   },
   {
@@ -331,12 +312,12 @@ const EXERCICES = [
     consignes:["Rester concentré sur le 2e ballon, souvent décisif","Transition rapide après le side-out","Gérer l'émotion : la séquence n'est pas finie au 1er ballon"],
     variantes:["Plus dur : 3 ballons d'affilée à gagner","Plus facile : 1 seul ballon compte, le 2e est bonus"],
     schema:{terrain:"full",elements:[
-      {type:"player",x:7,y:17,team:"A",label:"S"},
-      {type:"arrow",x:7,y:16.5,x2:3,y2:3,kind:"ball"},
-      {type:"label",x:4.5,y:10,label:"① service"},
-      {type:"player",x:4.5,y:12,team:"A",label:"6"},
-      {type:"label",x:7.2,y:12.5,label:"② relance"},
-      {type:"arrow",x:8.2,y:13.5,x2:4.8,y2:12.2,kind:"ball"}
+      {type:"player",team:"A",label:"S",x:7,y:17},
+      {type:"label",label:"① service",x:4.5,y:10},
+      {type:"player",team:"A",label:"6",x:4.5,y:12},
+      {type:"label",label:"② relance",x:7.2,y:12.5},
+      {type:"ball",path:[{x:7,y:16.5},{x:3,y:3}]},
+      {type:"ball",path:[{x:8.2,y:13.5},{x:4.8,y:12.2}]}
     ]}
   },
   {
@@ -353,16 +334,12 @@ const EXERCICES = [
     consignes:["Chaque joueur connaît sa tâche dans la rotation","Le passeur privilégie son attaquant le mieux placé","Viser l'efficacité, pas la puissance"],
     variantes:["Plus dur : ajouter un bloc et une défense adverses complets","Plus facile : service dosé, pas de bloc"],
     schema:{terrain:"full",elements:[
-      {type:"player",x:4.5,y:1.5,team:"B",label:"S"},
-      {type:"ball",x:3.8,y:1.3},
-      {type:"player",x:2.5,y:12.5,team:"A",label:"R"},
-      {type:"player",x:6.5,y:12.5,team:"A",label:"R"},
-      {type:"player",x:6.8,y:10.3,team:"A",label:"P"},
-      {type:"player",x:1.8,y:10.3,team:"A",label:"4"},
-      {type:"arrow",x:4.5,y:2,x2:2.6,y2:12.2,kind:"ball"},
-      {type:"arrow",x:2.6,y:12.2,x2:6.6,y2:10.5,kind:"pass"},
-      {type:"arrow",x:6.6,y:10.5,x2:2,y2:10.4,kind:"pass"},
-      {type:"arrow",x:1.8,y:10,x2:7.3,y2:2.5,kind:"ball"}
+      {type:"player",team:"B",label:"S",x:4.5,y:1.5},
+      {type:"ball",path:[{x:4.5,y:2},{x:2.6,y:12.2},{x:6.6,y:10.5},{x:2,y:10.4},{x:7.3,y:2.5}]},
+      {type:"player",team:"A",label:"R",x:2.5,y:12.5},
+      {type:"player",team:"A",label:"R",x:6.5,y:12.5},
+      {type:"player",team:"A",label:"P",x:6.8,y:10.3},
+      {type:"player",team:"A",label:"4",x:1.8,y:10.3}
     ]}
   },
   {
@@ -379,14 +356,17 @@ const EXERCICES = [
     consignes:["Qualité avant quantité : dos neutre, abdos engagés","Amortir les réceptions de saut, genoux dans l'axe","Respiration régulière, ne pas bloquer"],
     variantes:["Plus dur : 45/15 et 4 tours, ajouter du lest","Plus facile : 30/30 et 2 tours"],
     schema:{terrain:"half",elements:[
-      {type:"cone",x:1.5,y:1.5},{type:"label",x:1.5,y:2.6,label:"1 planche"},
-      {type:"cone",x:7.5,y:1.5},{type:"label",x:7.5,y:2.6,label:"2 fentes"},
-      {type:"cone",x:7.5,y:7.5},{type:"label",x:7.5,y:8.6,label:"3 gainage"},
-      {type:"cone",x:1.5,y:7.5},{type:"label",x:1.5,y:8.6,label:"4 squats"},
-      {type:"cone",x:4.5,y:4.5},{type:"label",x:4.5,y:5.6,label:"5 climbers"},
-      {type:"arrow",x:1.9,y:1.5,x2:7.1,y2:1.5,kind:"move"},
-      {type:"arrow",x:7.5,y:1.9,x2:7.5,y2:7.1,kind:"move"},
-      {type:"arrow",x:7.1,y:7.5,x2:1.9,y2:7.5,kind:"move"}
+      {type:"cone",x:1.5,y:1.5},
+      {type:"label",label:"1 planche",x:1.5,y:2.6},
+      {type:"cone",x:7.5,y:1.5},
+      {type:"label",label:"2 fentes",x:7.5,y:2.6},
+      {type:"cone",x:7.5,y:7.5},
+      {type:"label",label:"3 gainage",x:7.5,y:8.6},
+      {type:"cone",x:1.5,y:7.5},
+      {type:"label",label:"4 squats",x:1.5,y:8.6},
+      {type:"cone",x:4.5,y:4.5},
+      {type:"label",label:"5 climbers",x:4.5,y:5.6},
+      {type:"player",team:"A",label:"",path:[{x:1.9,y:1.5},{x:7.1,y:1.5},{x:7.5,y:7.1},{x:1.9,y:7.5}]}
     ]}
   },
   {
@@ -403,12 +383,16 @@ const EXERCICES = [
     consignes:["Appuis sur l'avant du pied, bras actifs","Rester bas sur les déplacements latéraux","Qualité et rythme avant la vitesse pure"],
     variantes:["Plus dur : ajouter un signal visuel pour changer de direction","Plus facile : ralentir et soigner la pose de pied"],
     schema:{terrain:"half",elements:[
-      {type:"label",x:2,y:1,label:"échelle"},
-      {type:"cone",x:1,y:2},{type:"cone",x:1,y:3},{type:"cone",x:1,y:4},{type:"cone",x:1,y:5},
-      {type:"arrow",x:1,y:2,x2:1,y2:5.2,kind:"move"},
-      {type:"cone",x:5,y:5},{type:"cone",x:8,y:5},
-      {type:"arrow",x:5,y:5,x2:8,y2:5,kind:"move"},
-      {type:"label",x:6.5,y:4,label:"pas chassés"}
+      {type:"label",label:"échelle",x:2,y:1},
+      {type:"cone",x:1,y:2},
+      {type:"cone",x:1,y:3},
+      {type:"cone",x:1,y:4},
+      {type:"cone",x:1,y:5},
+      {type:"cone",x:5,y:5},
+      {type:"cone",x:8,y:5},
+      {type:"label",label:"pas chassés",x:6.5,y:4},
+      {type:"player",team:"A",label:"",path:[{x:1,y:2},{x:1,y:5.2}]},
+      {type:"player",team:"A",label:"",path:[{x:5,y:5},{x:8,y:5}]}
     ]}
   },
   {
@@ -436,20 +420,19 @@ const EXERCICES = [
       "Plus facile : autoriser un rebond au sol du ballon en mouvement avant de le jouer, ou ralentir la mise en jeu"
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:3,y:11.8,team:"A",label:"A1"},
+      {type:"player",team:"A",label:"A1",x:3,y:11.8},
       {type:"ball",x:2,y:11.8},
-      {type:"player",x:6,y:11.8,team:"A",label:"A2"},
-      {type:"player",x:3,y:6.2,team:"B",label:"B1"},
+      {type:"player",team:"A",label:"A2",x:6,y:11.8},
+      {type:"player",team:"B",label:"B1",x:3,y:6.2},
       {type:"ball",x:2,y:6.2},
-      {type:"player",x:6,y:6.2,team:"B",label:"B2"},
-      {type:"arrow",x:6,y:6.8,x2:3.5,y2:11.2,kind:"ball"},
-      {type:"arrow",x:3.5,y:11.8,x2:5.5,y2:11.8,kind:"pass"},
-      {type:"player",x:4.4,y:16.6,team:"A",label:""},
-      {type:"player",x:5.7,y:16.9,team:"A",label:""},
-      {type:"label",x:4.6,y:15.2,label:"attente A"},
-      {type:"player",x:4.4,y:1.4,team:"B",label:""},
-      {type:"player",x:5.7,y:1.1,team:"B",label:""},
-      {type:"label",x:4.6,y:2.8,label:"attente B"}
+      {type:"player",team:"B",label:"B2",x:6,y:6.2},
+      {type:"player",team:"A",label:"",x:4.4,y:16.6},
+      {type:"player",team:"A",label:"",x:5.7,y:16.9},
+      {type:"label",label:"attente A",x:4.6,y:15.2},
+      {type:"player",team:"B",label:"",x:4.4,y:1.4},
+      {type:"player",team:"B",label:"",x:5.7,y:1.1},
+      {type:"label",label:"attente B",x:4.6,y:2.8},
+      {type:"ball",path:[{x:6,y:6.8},{x:3.5,y:11.2},{x:5.5,y:11.8}]}
     ]}
   },
   {
@@ -478,22 +461,20 @@ const EXERCICES = [
     schema:{terrain:"full",elements:[
       {type:"zone",x:0,y:9,w:9,h:3},
       {type:"zone",x:0,y:6,w:9,h:3},
-      {type:"label",x:7.9,y:10.5,label:"3 m"},
-      {type:"label",x:7.9,y:7.5,label:"3 m"},
-      {type:"arrow",x:3,y:1.6,x2:2.6,y2:11.3,kind:"ball"},
-      {type:"ball",x:3.9,y:1.4},
-      {type:"arrow",x:6.5,y:11.3,x2:6,y2:2.2,kind:"move"},
-      {type:"label",x:8,y:7,label:"échange"},
-      {type:"player",x:2.6,y:12.3,team:"A",label:"R"},
-      {type:"player",x:4.5,y:12.8,team:"A",label:"R"},
-      {type:"player",x:6.5,y:12.3,team:"A",label:"R"},
-      {type:"player",x:3,y:17,team:"A",label:"S"},
-      {type:"player",x:6,y:17,team:"A",label:"S"},
-      {type:"player",x:2.6,y:5.7,team:"B",label:"R"},
-      {type:"player",x:4.5,y:5.2,team:"B",label:"R"},
-      {type:"player",x:6.5,y:5.7,team:"B",label:"R"},
-      {type:"player",x:3,y:1,team:"B",label:"S"},
-      {type:"player",x:6,y:1,team:"B",label:"S"}
+      {type:"label",label:"3 m",x:7.9,y:10.5},
+      {type:"label",label:"3 m",x:7.9,y:7.5},
+      {type:"ball",path:[{x:3,y:1.6},{x:2.6,y:11.3}]},
+      {type:"label",label:"échange",x:8,y:7},
+      {type:"player",team:"A",label:"R",x:2.6,y:12.3},
+      {type:"player",team:"A",label:"R",x:4.5,y:12.8},
+      {type:"player",team:"A",label:"R",path:[{x:6.5,y:12.3},{x:6,y:2.2},{x:6.5,y:12.3}]},
+      {type:"player",team:"A",label:"S",x:3,y:17},
+      {type:"player",team:"A",label:"S",x:6,y:17},
+      {type:"player",team:"B",label:"R",x:2.6,y:5.7},
+      {type:"player",team:"B",label:"R",x:4.5,y:5.2},
+      {type:"player",team:"B",label:"R",x:6.5,y:5.7},
+      {type:"player",team:"B",label:"S",x:3,y:1},
+      {type:"player",team:"B",label:"S",x:6,y:1}
     ]}
   },
   {
@@ -520,15 +501,11 @@ const EXERCICES = [
       "Plus dur : élargir le triangle, imposer la passe en suspension, ou ajouter une 2e balle"
     ],
     schema:{terrain:"half",elements:[
-      {type:"player",x:4.5,y:2,team:"A",label:"1"},
-      {type:"player",x:7,y:6.8,team:"A",label:"2"},
-      {type:"player",x:2,y:6.8,team:"A",label:"3"},
-      {type:"ball",x:3.6,y:2},
-      {type:"arrow",x:4.9,y:2.4,x2:6.6,y2:6.4,kind:"ball"},
-      {type:"arrow",x:6.6,y:7.1,x2:2.4,y2:7.1,kind:"ball"},
-      {type:"arrow",x:2,y:6.4,x2:4.1,y2:2.4,kind:"ball"},
-      {type:"arrow",x:4.2,y:2.7,x2:2.5,y2:6.1,kind:"move"},
-      {type:"label",x:4.5,y:8,label:"passe à droite, puis va à gauche"}
+      {type:"player",team:"A",label:"1",path:[{x:4.5,y:2},{x:2.5,y:6.1},{x:4.5,y:2}]},
+      {type:"player",team:"A",label:"2",x:7,y:6.8},
+      {type:"player",team:"A",label:"3",x:2,y:6.8},
+      {type:"ball",path:[{x:4.9,y:2.4},{x:6.6,y:6.4},{x:2.4,y:7.1},{x:4.1,y:2.4}]},
+      {type:"label",label:"passe à droite, puis va à gauche",x:4.5,y:8}
     ]}
   },
   {
@@ -556,12 +533,11 @@ const EXERCICES = [
       "Plus dur : augmenter le nombre de cycles, varier la zone d'attaque de C, ou ajouter un déplacement latéral entre le bloc et la défense"
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:4.5,y:8,team:"B",label:"A"},
+      {type:"player",team:"B",label:"A",x:4.5,y:8},
       {type:"ball",x:4.5,y:8.5},
-      {type:"player",x:4.5,y:10,team:"A",label:"B"},
-      {type:"player",x:4.5,y:15,team:"A",label:"C"},
-      {type:"ball",x:4.5,y:14.5},
-      {type:"arrow",x:4.5,y:14.5,x2:4.5,y2:10.5,kind:"ball"}
+      {type:"player",team:"A",label:"B",x:4.5,y:10},
+      {type:"player",team:"A",label:"C",x:4.5,y:15},
+      {type:"ball",path:[{x:4.5,y:14.5},{x:4.5,y:10.5}]}
     ]}
   },
   {
@@ -587,18 +563,17 @@ const EXERCICES = [
       "Plus dur : n'autoriser le point qu'en gagnant côté roi, ou imposer 3 touches"
     ],
     schema:{terrain:"full",elements:[
-      {type:"label",x:4.5,y:1,label:"côté roi"},
-      {type:"player",x:1.5,y:4.5,team:"A",label:"R"},
-      {type:"player",x:4.5,y:3,team:"A",label:"R"},
-      {type:"player",x:7.5,y:4.5,team:"A",label:"R"},
-      {type:"player",x:2.5,y:13,team:"B",label:"C"},
-      {type:"player",x:6.5,y:13,team:"B",label:"C"},
-      {type:"player",x:4.5,y:18,team:"B",label:"S"},
-      {type:"ball",x:3.7,y:18},
-      {type:"arrow",x:4.5,y:17.4,x2:3,y2:5.7,kind:"ball"},
-      {type:"player",x:7.5,y:18.5,team:"B",label:""},
-      {type:"player",x:8.0,y:18.5,team:"B",label:""},
-      {type:"player",x:8.5,y:18.5,team:"B",label:""},
+      {type:"label",label:"côté roi",x:4.5,y:1},
+      {type:"player",team:"A",label:"R",x:1.5,y:4.5},
+      {type:"player",team:"A",label:"R",x:4.5,y:3},
+      {type:"player",team:"A",label:"R",x:7.5,y:4.5},
+      {type:"player",team:"B",label:"C",x:2.5,y:13},
+      {type:"player",team:"B",label:"C",x:6.5,y:13},
+      {type:"player",team:"B",label:"S",x:4.5,y:18},
+      {type:"ball",path:[{x:4.5,y:17.4},{x:3,y:5.7}]},
+      {type:"player",team:"B",label:"",x:7.5,y:18.5},
+      {type:"player",team:"B",label:"",x:8,y:18.5},
+      {type:"player",team:"B",label:"",x:8.5,y:18.5}
     ]}
   },
   {
@@ -626,15 +601,13 @@ const EXERCICES = [
       "Plus dur : ajouter un 3e ballon « perturbateur » (concentration passing) ou imposer une passe en suspension à la cible"
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:7,y:17,team:"B",label:"S"},
-      {type:"ball",x:7.8,y:16.8},
-      {type:"player",x:2.5,y:5.5,team:"A",label:"R"},
-      {type:"player",x:4,y:7.4,team:"A",label:"P"},
-      {type:"arrow",x:6.9,y:16.5,x2:2.7,y2:5.9,kind:"ball"},
-      {type:"arrow",x:2.7,y:5.3,x2:3.9,y2:7.1,kind:"pass"},
-      {type:"label",x:1.8,y:3.8,label:"file réception"},
-      {type:"label",x:7,y:15.1,label:"file service"},
-      {type:"label",x:5.8,y:11.5,label:"chacun suit son ballon"}
+      {type:"player",team:"B",label:"S",x:7,y:17},
+      {type:"ball",path:[{x:6.9,y:16.5},{x:2.7,y:5.9},{x:3.9,y:7.1}]},
+      {type:"player",team:"A",label:"R",x:2.5,y:5.5},
+      {type:"player",team:"A",label:"P",x:4,y:7.4},
+      {type:"label",label:"file réception",x:1.8,y:3.8},
+      {type:"label",label:"file service",x:7,y:15.1},
+      {type:"label",label:"chacun suit son ballon",x:5.8,y:11.5}
     ]}
   },
   {
@@ -660,17 +633,13 @@ const EXERCICES = [
       "Varier la mise en jeu : lancer lifté (imite le topspin), lancer tendu à deux mains (imite le flottant)"
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:3,y:5.5,team:"A",label:"R"},
-      {type:"player",x:6,y:7,team:"A",label:"P"},
-      {type:"player",x:4.5,y:8,team:"A",label:"C"},
+      {type:"player",team:"A",label:"R",x:3,y:5.5},
+      {type:"player",team:"A",label:"P",x:6,y:7},
+      {type:"player",team:"A",label:"C",x:4.5,y:8},
       {type:"ball",x:5.3,y:8},
-      {type:"player",x:4.5,y:17,team:"B",label:"S"},
-      {type:"ball",x:3.8,y:16.8},
-      {type:"arrow",x:4.5,y:16.5,x2:3.1,y2:5.9,kind:"ball"},
-      {type:"arrow",x:3.1,y:5.5,x2:5.8,y2:6.9,kind:"pass"},
-      {type:"arrow",x:5.9,y:7.1,x2:4.8,y2:7.9,kind:"pass"},
-      {type:"arrow",x:5.1,y:8.2,x2:4.6,y2:16.4,kind:"ball"},
-      {type:"label",x:7.2,y:12,label:"relance immédiate"}
+      {type:"player",team:"B",label:"S",x:4.5,y:17},
+      {type:"ball",path:[{x:4.5,y:16.5},{x:3.1,y:5.9},{x:5.8,y:6.9},{x:4.8,y:7.9},{x:4.6,y:16.4}]},
+      {type:"label",label:"relance immédiate",x:7.2,y:12}
     ]}
   },
   {
@@ -697,12 +666,12 @@ const EXERCICES = [
       "Plus dur : élargir les écarts, ou faire suivre chacun sa passe pour aller au bout de la colonne (rotation continue)"
     ],
     schema:{terrain:"half",elements:[
-      {type:"player",x:4.5,y:8,team:"B",label:""},
-      {type:"player",x:4.5,y:5.5,team:"A",label:"1"},
-      {type:"player",x:4.5,y:4,team:"A",label:"2"},
-      {type:"player",x:4.5,y:2.5,team:"A",label:"3"},
-      {type:"player",x:4.5,y:1,team:"A",label:"4"},
-      {type:"arrow",x:4.5,y:1,x2:4.5,y2:8,kind:"ball"},
+      {type:"player",team:"B",label:"",x:4.5,y:8},
+      {type:"player",team:"A",label:"1",x:4.5,y:5.5},
+      {type:"player",team:"A",label:"2",x:4.5,y:4},
+      {type:"player",team:"A",label:"3",x:4.5,y:2.5},
+      {type:"player",team:"A",label:"4",x:4.5,y:1},
+      {type:"ball",path:[{x:4.5,y:1},{x:4.5,y:8}]}
     ]}
   },
   {
@@ -726,11 +695,12 @@ const EXERCICES = [
       "Plus facile : réduire la hauteur des genoux et la distance"
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:4.5,y:16.8,team:"A",label:""},
-      {type:"arrow",x:4.1,y:16.3,x2:4.1,y2:9.4,kind:"move"},
-      {type:"arrow",x:4.9,y:9.4,x2:4.9,y2:16.3,kind:"move"},
-      {type:"label",x:2.5,y:13,label:"genoux hauts"},
-      {type:"label",x:6.5,y:13,label:"retour"}
+      {type:"player",team:"A",label:"",path:[{x:0.5,y:17.5},{x:0.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:2.5,y:17.5},{x:2.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:4.5,y:17.5},{x:4.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:6.5,y:17.5},{x:6.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:8.5,y:17.5},{x:8.5,y:9.4}],loop:true},
+      {type:"label",label:"genoux hauts",x:4.5,y:7},
     ]}
   },
   {
@@ -754,11 +724,12 @@ const EXERCICES = [
       "Plus facile : fentes plus courtes, geste de bras sans amplitude maximale"
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:4.5,y:16.8,team:"A",label:""},
-      {type:"arrow",x:4.1,y:16.3,x2:4.1,y2:9.4,kind:"move"},
-      {type:"arrow",x:4.9,y:9.4,x2:4.9,y2:16.3,kind:"move"},
-      {type:"label",x:2.5,y:13,label:"fente + bras"},
-      {type:"label",x:6.5,y:13,label:"retour"}
+      {type:"player",team:"A",label:"",path:[{x:0.5,y:17.5},{x:0.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:2.5,y:17.5},{x:2.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:4.5,y:17.5},{x:4.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:6.5,y:17.5},{x:6.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:8.5,y:17.5},{x:8.5,y:9.4}],loop:true},
+      {type:"label",label:"fente + bras",x:4.5,y:7},
     ]}
   },
   {
@@ -782,11 +753,13 @@ const EXERCICES = [
       "Plus facile : ralentir et raccourcir la distance"
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:4.5,y:16.8,team:"A",label:""},
-      {type:"arrow",x:4.1,y:16.3,x2:4.1,y2:9.4,kind:"move"},
-      {type:"arrow",x:4.9,y:9.4,x2:4.9,y2:16.3,kind:"move"},
-      {type:"label",x:2.4,y:13,label:"talons-fesses"},
-      {type:"label",x:6.6,y:13,label:"pas chassés"}
+      {type:"player",team:"A",label:"",path:[{x:0.5,y:17.5},{x:0.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:2.5,y:17.5},{x:2.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:4.5,y:17.5},{x:4.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:6.5,y:17.5},{x:6.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:8.5,y:17.5},{x:8.5,y:9.4}],loop:true},
+      {type:"label",label:"talons-fesses",x:2.4,y:7},
+      {type:"label",label:"pas chassés",x:6.6,y:7}
     ]}
   },
   {
@@ -810,11 +783,12 @@ const EXERCICES = [
       "Plus facile : moins de touches au sol, distance réduite"
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:4.5,y:16.8,team:"A",label:""},
-      {type:"arrow",x:4.1,y:16.3,x2:4.1,y2:9.4,kind:"move"},
-      {type:"arrow",x:4.9,y:9.4,x2:4.9,y2:16.3,kind:"move"},
-      {type:"label",x:2.6,y:13,label:"position basse"},
-      {type:"label",x:6.8,y:13,label:"retour"}
+      {type:"player",team:"A",label:"",path:[{x:0.5,y:17.5},{x:0.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:2.5,y:17.5},{x:2.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:4.5,y:17.5},{x:4.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:6.5,y:17.5},{x:6.5,y:9.4}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:8.5,y:17.5},{x:8.5,y:9.4}],loop:true},
+      {type:"label",label:"position basse",x:4.5,y:7},
     ]}
   },
   {
@@ -838,11 +812,12 @@ const EXERCICES = [
       "Plus facile : ralentir et réduire l'amplitude"
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:1.5,y:11,team:"A",label:""},
-      {type:"arrow",x:2,y:10.6,x2:7.5,y2:10.6,kind:"move"},
-      {type:"arrow",x:7.5,y:11.4,x2:2,y2:11.4,kind:"move"},
-      {type:"label",x:4.5,y:9.6,label:"pas croisés"},
-      {type:"label",x:4.5,y:12.4,label:"aller-retour latéral"}
+      {type:"player",team:"A",label:"",path:[{x:1,y:11},{x:8,y:11}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:1,y:13},{x:8,y:13}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:1,y:15},{x:8,y:15}],loop:true},
+      {type:"player",team:"A",label:"",path:[{x:1,y:17},{x:8,y:17}],loop:true},
+      {type:"label",label:"pas croisés",x:4.5,y:5},
+      {type:"label",label:"aller-retour latéral",x:4.5,y:7}
     ]}
   },
   {
@@ -868,7 +843,7 @@ const EXERCICES = [
     ],
     schema:{terrain:"half",elements:[
       {type:"player",x:4.5,y:5,team:"A",label:""},
-      {type:"ball",x:4.5,y:4.5},
+      {type:"ball",path:[{x:4,y:4.5},{x:5,y:4.5}],loop:true},
     ]}
   },
   {
@@ -893,10 +868,9 @@ const EXERCICES = [
       "Plus dur : augmenter la distance, imposer le bras faible, ajouter un déplacement"
     ],
     schema:{terrain:"half",elements:[
-      {type:"player",x:4.5,y:2,team:"A",label:"A"},
-      {type:"player",x:4.5,y:8,team:"A",label:"B"},
-      {type:"arrow",x:4.3,y:1.9,x2:4.3,y2:7.9,kind:"ball"},
-      {type:"arrow",x:4.7,y:1.9,x2:4.7,y2:7.9,kind:"pass"}
+      {type:"player",team:"A",label:"A",x:4.5,y:2},
+      {type:"player",team:"A",label:"B",x:4.5,y:8},
+      {type:"ball",path:[{x:4.5,y:2.5},{x:4.5,y:7.5}],loop:true},
     ]}
   },
   {
@@ -1048,13 +1022,13 @@ const EXERCICES = [
       "Plus dur : éloigner les joueurs, ajouter une consigne de déplacement après la passe"
     ],
     schema:{terrain:"half",elements:[
-      {type:"player",x:4.5,y:8,team:"A",label:"A"},
+      {type:"player",team:"A",label:"A",x:4.5,y:8},
       {type:"zone",x:3.7,y:5.4,w:1.6,h:1.4},
-      {type:"player",x:4.5,y:1,team:"B",label:"B"},
+      {type:"player",team:"B",label:"B",x:4.5,y:1},
       {type:"zone",x:3.7,y:2.2,w:1.6,h:1.4},
       {type:"zone",x:3.7,y:3.9,w:1.6,h:1.2},
-      {type:"arrow",x:4.5,y:7.6,x2:4.5,y2:6,kind:"pass"},
-      {type:"arrow",x:4.5,y:1.4,x2:4.5,y2:3,kind:"pass"}
+      {type:"ball",path:[{x:4.5,y:7.6},{x:4.5,y:6}]},
+      {type:"ball",path:[{x:4.5,y:1.4},{x:4.5,y:3}]}
     ]}
   },
   {
@@ -1079,20 +1053,16 @@ const EXERCICES = [
       "Plus dur : passe arrière aux 3 mètres pour une attaque depuis la ligne arrière"
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:2,y:1.5,team:"A"},
-      {type:"player",x:2,y:3,team:"A",label:"S"},
-      {type:"player",x:2,y:13,team:"A",label:"R"},
-      {type:"player",x:5,y:10,team:"A",label:"P"},
-      {type:"arrow",x:2,y:3,x2:2,y2:13,kind:"ball"},
-      {type:"arrow",x:2,y:13,x2:5,y2:10,kind:"pass"},
-      {type:"arrow",x:5,y:10,x2:8,y2:10,kind:"ball"},
-      {type:"player",x:7,y:16.5,team:"B"},
-      {type:"player",x:7,y:15,team:"B",label:"S"},
-      {type:"player",x:7,y:5,team:"B",label:"R"},
-      {type:"player",x:5,y:8,team:"B",label:"P"},
-      {type:"arrow",x:7,y:15,x2:7,y2:5,kind:"ball"},
-      {type:"arrow",x:7,y:5,x2:5,y2:8,kind:"pass"},
-      {type:"arrow",x:5,y:8,x2:1,y2:8,kind:"ball"},
+      {type:"player",team:"A",x:2,y:1.5},
+      {type:"player",team:"A",label:"S",x:2,y:3},
+      {type:"player",team:"A",label:"R",x:2,y:13},
+      {type:"player",team:"A",label:"P",x:5,y:10},
+      {type:"player",team:"B",x:7,y:16.5},
+      {type:"player",team:"B",label:"S",x:7,y:15},
+      {type:"player",team:"B",label:"R",x:7,y:5},
+      {type:"player",team:"B",label:"P",x:5,y:8},
+      {type:"ball",path:[{x:2,y:3},{x:2,y:13},{x:5,y:10},{x:8,y:10}]},
+      {type:"ball",path:[{x:7,y:15},{x:7,y:5},{x:5,y:8},{x:1,y:8}]}
     ]}
   },
   {
@@ -1117,12 +1087,10 @@ const EXERCICES = [
       "À plusieurs : se relayer sur un même mur, ou enchaîner passe au mur puis passe à un partenaire."
     ],
     schema:{terrain:"wall",elements:[
-      {type:"label",x:1.0,y:0.55,label:"mur"},
-      {type:"player",x:4.5,y:5.2,team:"A",label:"1"},
-      {type:"ball",x:4.5,y:4.3},
-      {type:"arrow",x:4.1,y:4.1,x2:4.1,y2:0.6,kind:"ball"},
-      {type:"arrow",x:4.9,y:0.6,x2:4.9,y2:4.1,kind:"ball"},
-      {type:"label",x:4.5,y:6.1,label:"varie la distance"}
+      {type:"label",label:"mur",x:1,y:0.55},
+      {type:"player",team:"A",label:"1",x:4.5,y:5.2},
+      {type:"ball",path:[{x:4.1,y:4.1},{x:4.1,y:0.6},{x:4.9,y:4.1}]},
+      {type:"label",label:"varie la distance",x:4.5,y:6.1}
     ]}
   },
   {
@@ -1147,12 +1115,10 @@ const EXERCICES = [
       "À plusieurs : se relayer sur un même mur, ou alterner manchette au mur puis manchette à un partenaire."
     ],
     schema:{terrain:"wall",elements:[
-      {type:"label",x:1.0,y:0.55,label:"mur"},
-      {type:"player",x:4.5,y:5.2,team:"A",label:"1"},
-      {type:"ball",x:4.5,y:4.3},
-      {type:"arrow",x:4.1,y:4.1,x2:4.1,y2:0.6,kind:"ball"},
-      {type:"arrow",x:4.9,y:0.6,x2:4.9,y2:4.1,kind:"ball"},
-      {type:"label",x:4.5,y:6.1,label:"varie la distance"}
+      {type:"label",label:"mur",x:1,y:0.55},
+      {type:"player",team:"A",label:"1",x:4.5,y:5.2},
+      {type:"ball",path:[{x:4.1,y:4.1},{x:4.1,y:0.6},{x:4.9,y:4.1}]},
+      {type:"label",label:"varie la distance",x:4.5,y:6.1}
     ]}
   },
   {
@@ -1178,13 +1144,10 @@ const EXERCICES = [
       "À plusieurs : se relayer sur un même mur, l'un frappe, l'autre récupère et relance."
     ],
     schema:{terrain:"wall",elements:[
-      {type:"label",x:1.0,y:0.55,label:"mur"},
-      {type:"player",x:6.0,y:4.8,team:"A",label:"1"},
-      {type:"ball",x:5.6,y:3.9},
-      {type:"arrow",x:5.3,y:3.6,x2:3.6,y2:4.7,kind:"ball"},
-      {type:"arrow",x:3.5,y:4.6,x2:2.1,y2:0.7,kind:"ball"},
-      {type:"arrow",x:2.1,y:0.7,x2:5.3,y2:3.8,kind:"ball"},
-      {type:"label",x:3.5,y:5.4,label:"rebond au sol"}
+      {type:"label",label:"mur",x:1,y:0.55},
+      {type:"player",team:"A",label:"1",x:6,y:4.8},
+      {type:"ball",path:[{x:5.3,y:3.6},{x:3.6,y:4.7},{x:2.1,y:0.7},{x:5.3,y:3.8}]},
+      {type:"label",label:"rebond au sol",x:3.5,y:5.4}
     ]}
   },
 
@@ -1214,12 +1177,10 @@ const EXERCICES = [
       "Chronométré : nombre de blocs propres en 30 secondes."
     ],
     schema:{terrain:"half",elements:[
-      {type:"player",x:1.5,y:1.3,team:"A",label:"B"},
-      {type:"label",x:1.5,y:2.7,label:"zone 4"},
-      {type:"label",x:4.5,y:2.7,label:"zone 3"},
-      {type:"label",x:7.5,y:2.7,label:"zone 2"},
-      {type:"arrow",x:2.2,y:1.3,x2:3.9,y2:1.3,kind:"move"},
-      {type:"arrow",x:5.1,y:1.3,x2:6.9,y2:1.3,kind:"move"}
+      {type:"player",team:"A",label:"B",path:[{x:1.5,y:1.3},{x:3.9,y:1.3},{x:6.9,y:1.3},{x:1.5,y:1.3}]},
+      {type:"label",label:"zone 4",x:1.5,y:2.7},
+      {type:"label",label:"zone 3",x:4.5,y:2.7},
+      {type:"label",label:"zone 2",x:7.5,y:2.7}
     ]}
   },
 
@@ -1245,13 +1206,12 @@ const EXERCICES = [
       "Avec jeu réel : on joue le point après le contre."
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:2,y:6.8,team:"B",label:"A4"},
-      {type:"player",x:4.5,y:6.8,team:"B",label:"A3"},
-      {type:"player",x:7,y:6.8,team:"B",label:"A2"},
-      {type:"player",x:4.5,y:10,team:"A",label:"B"},
-      {type:"label",x:4.5,y:4.4,label:"le coach distribue"},
-      {type:"arrow",x:4.5,y:5,x2:6.8,y2:6.6,kind:"ball"},
-      {type:"arrow",x:4.5,y:9.7,x2:6.6,y2:9.7,kind:"move"}
+      {type:"player",team:"B",label:"A4",x:2,y:6.8},
+      {type:"player",team:"B",label:"A3",x:4.5,y:6.8},
+      {type:"player",team:"B",label:"A2",x:7,y:6.8},
+      {type:"player",team:"A",label:"B",path:[{x:4.5,y:10},{x:6.6,y:9.7},{x:4.5,y:10}]},
+      {type:"label",label:"le coach distribue",x:4.5,y:4.4},
+      {type:"ball",path:[{x:4.5,y:5},{x:6.8,y:6.6}]}
     ]}
   },
 
@@ -1278,11 +1238,11 @@ const EXERCICES = [
       "Service sauté imposé pour les joueurs confirmés."
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:2,y:17.4,team:"A",label:"S"},
-      {type:"player",x:4.5,y:17.4,team:"A",label:"S"},
-      {type:"player",x:7,y:17.4,team:"A",label:"S"},
-      {type:"zone",x:0.6,y:0.8,w:7.8,h:2.4,label:"zone cible"},
-      {type:"arrow",x:4.5,y:16.8,x2:4.5,y2:2.4,kind:"ball"}
+      {type:"player",team:"A",label:"S",x:2,y:17.4},
+      {type:"player",team:"A",label:"S",x:4.5,y:17.4},
+      {type:"player",team:"A",label:"S",x:7,y:17.4},
+      {type:"zone",label:"zone cible",x:0.6,y:0.8,w:7.8,h:2.4},
+      {type:"ball",path:[{x:4.5,y:16.8},{x:4.5,y:2.4}]}
     ]}
   },
 
@@ -1309,14 +1269,12 @@ const EXERCICES = [
       "Travailler aussi la pointe (zone 2) et l'attaque arrière."
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:6,y:10.2,team:"A",label:"P"},
-      {type:"player",x:2,y:12,team:"A",label:"A"},
-      {type:"arrow",x:2,y:11.6,x2:2,y2:10.2,kind:"move"},
-      {type:"arrow",x:5.7,y:10.2,x2:2.3,y2:10,kind:"pass"},
-      {type:"arrow",x:2,y:9.5,x2:7,y2:2.2,kind:"ball"},
-      {type:"arrow",x:2,y:9.5,x2:1.5,y2:2.2,kind:"ball"},
-      {type:"zone",x:5.5,y:0.5,w:3,h:3,label:"diag"},
-      {type:"zone",x:0,y:0.5,w:3,h:3,label:"ligne"}
+      {type:"player",team:"A",label:"P",x:6,y:10.2},
+      {type:"player",team:"A",label:"A",path:[{x:2,y:12},{x:2,y:10.2},{x:2,y:12}]},
+      {type:"zone",label:"diag",x:5.5,y:0.5,w:3,h:3},
+      {type:"zone",label:"ligne",x:0,y:0.5,w:3,h:3},
+      {type:"ball",path:[{x:5.7,y:10.2},{x:2.3,y:10},{x:7,y:2.2}]},
+      {type:"ball",path:[{x:2,y:9.5},{x:1.5,y:2.2}]}
     ]}
   },
 
@@ -1343,13 +1301,12 @@ const EXERCICES = [
       "Imposer la solution (sortie, puis feinte, puis ligne) à chaque passage."
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:6,y:10.2,team:"A",label:"P"},
-      {type:"player",x:2.2,y:11.8,team:"A",label:"A"},
-      {type:"player",x:2,y:8.3,team:"B",label:"B"},
-      {type:"player",x:3.4,y:8.3,team:"B",label:"B"},
-      {type:"arrow",x:5.7,y:10.2,x2:2.5,y2:10,kind:"pass"},
-      {type:"arrow",x:2.2,y:9.5,x2:0.4,y2:12.5,kind:"ball"},
-      {type:"label",x:1.2,y:13.4,label:"sortie (touche-dehors)"}
+      {type:"player",team:"A",label:"P",x:6,y:10.2},
+      {type:"player",team:"A",label:"A",x:2.2,y:11.8},
+      {type:"player",team:"B",label:"B",x:2,y:8.3},
+      {type:"player",team:"B",label:"B",x:3.4,y:8.3},
+      {type:"label",label:"sortie (touche-dehors)",x:1.2,y:13.4},
+      {type:"ball",path:[{x:5.7,y:10.2},{x:2.5,y:10},{x:0.4,y:12.5}]}
     ]}
   },
 
@@ -1376,13 +1333,11 @@ const EXERCICES = [
       "Le meneur pousse le ballon par-dessus le filet et le second doit le contrer/le bloquer au lieu de l'attraper."
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:7,y:8.3,team:"B",label:"1"},
+      {type:"player",team:"B",label:"1",path:[{x:7,y:8.3},{x:3.6,y:8.3},{x:7,y:8.3}]},
       {type:"ball",x:7,y:8.8},
-      {type:"player",x:7,y:9.7,team:"A",label:"2"},
-      {type:"arrow",x:6.4,y:8.3,x2:3.6,y2:8.3,kind:"move"},
-      {type:"arrow",x:6.4,y:9.7,x2:3.6,y2:9.7,kind:"move"},
-      {type:"label",x:4.5,y:7.2,label:"pas chassés le long du filet"},
-      {type:"label",x:4.5,y:10.8,label:"suit en miroir, saute en réflexe"}
+      {type:"player",team:"A",label:"2",path:[{x:7,y:9.7},{x:3.6,y:9.7},{x:7,y:9.7}]},
+      {type:"label",label:"pas chassés le long du filet",x:4.5,y:7.2},
+      {type:"label",label:"suit en miroir, saute en réflexe",x:4.5,y:10.8}
     ]}
   },
 
@@ -1409,13 +1364,10 @@ const EXERCICES = [
       "Enchaîner plusieurs sauvetages de suite (travail physique)."
     ],
     schema:{terrain:"half",elements:[
-      {type:"player",x:4.5,y:1,team:"B",label:"L"},
-      {type:"ball",x:5,y:1},
-      {type:"arrow",x:4.5,y:1,x2:1,y2:10,kind:"ball"},
-      {type:"player",x:4.5,y:3.1,team:"A",label:"1"},
-      {type:"arrow",x:4.5,y:3.1,x2:1,y2:10,kind:"move"},
-      {type:"arrow",x:1,y:10,x2:6,y2:6,kind:"pass"},
-      {type:"label",x:1,y:3.3,label:"hors du terrain"}
+      {type:"player",team:"B",label:"L",x:4.5,y:1},
+      {type:"ball",path:[{x:4.5,y:1},{x:1,y:10},{x:6,y:6}]},
+      {type:"player",team:"A",label:"1",path:[{x:4.5,y:3.1},{x:1,y:10},{x:4.5,y:3.1}]},
+      {type:"label",label:"hors du terrain",x:1,y:3.3}
     ]}
   },
 
@@ -1441,13 +1393,10 @@ const EXERCICES = [
       "Plus dur : relance agressive (attaque placée) sur une cible adverse."
     ],
     schema:{terrain:"half",elements:[
-      {type:"player",x:4.5,y:1,team:"B",label:"L"},
-      {type:"ball",x:5,y:1},
-      {type:"arrow",x:4.5,y:1,x2:1,y2:9.5,kind:"ball"},
-      {type:"player",x:1,y:9.5,team:"A",label:"1"},
-      {type:"arrow",x:1,y:9.5,x2:6,y2:6,kind:"pass"},
-      {type:"player",x:6,y:6,team:"A",label:"2"},
-      {type:"arrow",x:6,y:6,x2:7,y2:0,kind:"ball"},
+      {type:"player",team:"B",label:"L",x:4.5,y:1},
+      {type:"ball",path:[{x:4.5,y:1},{x:1,y:9.5},{x:6,y:6},{x:7,y:0}]},
+      {type:"player",team:"A",label:"1",x:1,y:9.5},
+      {type:"player",team:"A",label:"2",x:6,y:6}
     ]}
   },
   {
@@ -1473,15 +1422,12 @@ const EXERCICES = [
       "Plus dur : varier l'ordre sans annonce et raccourcir le délai entre les deux balles."
     ],
     schema:{terrain:"full",elements:[
-      {type:"player",x:4.5,y:10,team:"A",label:"F"},
-      {type:"ball",x:5.3,y:10},
-      {type:"player",x:4.5,y:16.5,team:"A",label:"R"},
-      {type:"ball",x:5.3,y:16.5},
-      {type:"player",x:2.2,y:13,team:"A",label:"T"},
-      {type:"arrow",x:4.2,y:10.3,x2:2.6,y2:12.7,kind:"ball"},
-      {type:"arrow",x:4.2,y:16.2,x2:2.6,y2:13.3,kind:"ball"},
-      {type:"arrow",x:2.5,y:13,x2:4.1,y2:10.3,kind:"pass"},
-      {type:"label",x:1,y:13,label:"se retourne"}
+      {type:"player",team:"A",label:"F",x:4.5,y:10},
+      {type:"ball",path:[{x:4.2,y:10.3},{x:2.6,y:12.7}]},
+      {type:"player",team:"A",label:"R",x:4.5,y:16.5},
+      {type:"ball",path:[{x:4.2,y:16.2},{x:2.6,y:13.3},{x:4.1,y:10.3}]},
+      {type:"player",team:"A",label:"T",x:2.2,y:13},
+      {type:"label",label:"se retourne",x:1,y:13}
     ]}
   },
   {
@@ -1540,20 +1486,15 @@ const EXERCICES = [
       "Plus facile : réduire à deux zones, ou laisser plus de temps entre les ballons."
     ],
     schema:{terrain:"half",elements:[
-      {type:"player",x:4.5,y:1,team:"A",label:"P"},
-      {type:"player",x:1,y:8,team:"A",label:"J"},
-      {type:"player",x:1,y:8.8,team:"A",label:""},
-      {type:"ball",x:1.5,y:8},
-      {type:"arrow",x:1,y:8,x2:4.5,y2:1,kind:"ball"},
-      {type:"arrow",x:4.5,y:1,x2:1.5,y2:2,kind:"ball"},
-      {type:"arrow",x:4.5,y:1,x2:4.5,y2:8,kind:"ball"},
-      {type:"arrow",x:4.5,y:1,x2:8,y2:2,kind:"ball"},
-      {type:"arrow",x:1,y:7,x2:1.5,y2:2.5,kind:"move"},
-      {type:"arrow",x:2,y:3,x2:4.5,y2:8,kind:"move"},
-      {type:"arrow",x:5,y:7.5,x2:7.5,y2:3,kind:"move"},
-      {type:"label",x:1,y:2,label:"1"},
-      {type:"label",x:4.5,y:8.5,label:"2"},
-      {type:"label",x:8.5,y:2,label:"3"}
+      {type:"player",team:"A",label:"P",x:4.5,y:1},
+      {type:"player",team:"A",label:"J",path:[{x:1,y:8},{x:1.5,y:2.5},{x:4.5,y:8},{x:7.5,y:3},{x:1,y:8}]},
+      {type:"player",team:"A",label:"",x:1,y:8.8},
+      {type:"ball",path:[{x:1,y:8},{x:4.5,y:1},{x:1.5,y:2}]},
+      {type:"label",label:"1",x:1,y:2},
+      {type:"label",label:"2",x:4.5,y:8.5},
+      {type:"label",label:"3",x:8.5,y:2},
+      {type:"ball",path:[{x:4.5,y:1},{x:4.5,y:8}]},
+      {type:"ball",path:[{x:4.5,y:1},{x:8,y:2}]}
     ]}
   },
   {
@@ -1570,10 +1511,9 @@ const EXERCICES = [
     consignes:["Passe haute stable, jouée devant le front","Reculer en pas chassés, sans croiser les appuis","Longue passe gainée : trajectoire haute et tendue vers la cible"],
     variantes:["Plus dur : le joueur 2 attaque le joueur 1 juste après la longue passe, qui doit défendre","Plus facile : 4 touches pour atteindre le fond, ou réduire la distance"],
     schema:{terrain:"half",elements:[
-      {type:"player",x:3,y:3,team:"A",label:"1"},
-      {type:"arrow",x:3,y:3.3,x2:3,y2:8,kind:"move"},
-      {type:"arrow",x:3.3,y:8,x2:5.7,y2:3.2,kind:"pass"},
-      {type:"player",x:6,y:3,team:"B",label:"2"}
+      {type:"player",team:"A",label:"1",path:[{x:3,y:3},{x:3,y:8},{x:3,y:3}]},
+      {type:"player",team:"B",label:"2",x:6,y:3},
+      {type:"ball",path:[{x:3.3,y:8},{x:5.7,y:3.2}]}
     ]}
   },
   {
@@ -1590,11 +1530,9 @@ const EXERCICES = [
     consignes:["Contrôle amorti, cheville souple","Regard sur le ballon puis sur la cible avant de passer","Rester sur des appuis dynamiques, genoux fléchis"],
     variantes:["Plus dur : un seul contact, passe directe sans contrôle","Plus dur : augmenter la distance et la vitesse d'échange","Plus facile : contrôle autorisé en deux ou trois touches"],
     schema:{terrain:"half",elements:[
-      {type:"player",x:3,y:4,team:"A",label:"1"},
-      {type:"player",x:6,y:4,team:"B",label:"2"},
-      {type:"ball",x:4.5,y:4},
-      {type:"arrow",x:3.4,y:3.6,x2:5.6,y2:3.6,kind:"move"},
-      {type:"arrow",x:5.6,y:4.4,x2:3.4,y2:4.4,kind:"move"}
+      {type:"player",team:"A",label:"1",path:[{x:3,y:4},{x:5.6,y:3.6},{x:3,y:4}]},
+      {type:"player",team:"B",label:"2",x:6,y:4},
+      {type:"ball",x:4.5,y:4}
     ]}
   },
   {
@@ -1611,11 +1549,10 @@ const EXERCICES = [
     consignes:["Bras déjà formés en plan, épaules vers la cible","Pousser la balle au sol et remonter les bras d'un seul tenant","Jouer la balle devant soi, l'impulsion vient des jambes"],
     variantes:["Plus dur : varier la hauteur et la vitesse de la balle lancée","Plus facile : annoncer et ralentir le lancer, laisser plus de temps entre les deux balles"],
     schema:{terrain:"half",elements:[
-      {type:"player",x:3.5,y:6,team:"A",label:"1"},
+      {type:"player",team:"A",label:"1",path:[{x:3.5,y:6},{x:5.8,y:3.5},{x:3.5,y:6}]},
       {type:"ball",x:3.5,y:6.8},
-      {type:"player",x:6,y:3,team:"B",label:"2"},
-      {type:"arrow",x:5.8,y:3.3,x2:3.9,y2:5.7,kind:"ball"},
-      {type:"arrow",x:3.6,y:6.6,x2:5.8,y2:3.5,kind:"move"}
+      {type:"player",team:"B",label:"2",x:6,y:3},
+      {type:"ball",path:[{x:5.8,y:3.3},{x:3.9,y:5.7}]}
     ]}
   },
   {
@@ -1634,10 +1571,9 @@ const EXERCICES = [
     schema:{terrain:"half",elements:[
       {type:"zone",x:3.8,y:5.3,w:1.2,h:1.2},
       {type:"zone",x:3.8,y:3.9,w:1.2,h:1.2},
-      {type:"player",x:4.4,y:6.7,team:"A",label:"1"},
-      {type:"arrow",x:4.4,y:6.5,x2:4.4,y2:4.3,kind:"move"},
-      {type:"player",x:6,y:1.6,team:"B",label:"2"},
-      {type:"arrow",x:5.8,y:1.9,x2:4.6,y2:4.4,kind:"ball"}
+      {type:"player",team:"A",label:"1",path:[{x:4.4,y:6.7},{x:4.4,y:4.3},{x:4.4,y:6.7}]},
+      {type:"player",team:"B",label:"2",x:6,y:1.6},
+      {type:"ball",path:[{x:5.8,y:1.9},{x:4.6,y:4.4}]}
     ]}
   },
   {
@@ -1657,12 +1593,10 @@ const EXERCICES = [
       {type:"player",x:4.5,y:0.6,team:"B",label:"C"},
       {type:"zone",x:2.0,y:1.5,w:1.2,h:1.2},
       {type:"zone",x:5.8,y:1.5,w:1.2,h:1.2},
-      {type:"arrow",x:4.3,y:0.9,x2:2.9,y2:2.0,kind:"ball"},
-      {type:"arrow",x:4.7,y:0.9,x2:6.1,y2:2.0,kind:"ball"},
-      {type:"player",x:2.6,y:8.5,team:"A",label:"1"},
-      {type:"player",x:6.4,y:8.5,team:"A",label:"2"},
-      {type:"arrow",x:2.6,y:8.2,x2:2.6,y2:2.8,kind:"move"},
-      {type:"arrow",x:6.4,y:8.2,x2:6.4,y2:2.8,kind:"move"}
+      {type:"ball",path:[{x:4.3,y:0.9},{x:2.6,y:2.1}]},
+      {type:"ball",path:[{x:4.7,y:0.9},{x:6.4,y:2.1}]},
+      {type:"player",team:"A",label:"1",path:[{x:2.6,y:8.5},{x:2.6,y:2.6}]},
+      {type:"player",team:"A",label:"2",path:[{x:6.4,y:8.5},{x:6.4,y:2.6}]}
     ]}
   },
   {
@@ -1679,11 +1613,9 @@ const EXERCICES = [
     consignes:["Lire vite la trajectoire et se déplacer pour passer sous la balle","Plateau de manchette orienté vers l'arrière, pousser avec les jambes","Renvoi haut pour laisser le temps au partenaire de jouer"],
     variantes:["Plus dur : varier la longueur du lancer et accélérer la balle","Au filet : placer les joueurs de part et d'autre et renvoyer par-dessus le filet"],
     schema:{terrain:"half",elements:[
-      {type:"player",x:4.5,y:6.5,team:"B",label:"2"},
-      {type:"player",x:4.5,y:4.6,team:"A",label:"1"},
-      {type:"arrow",x:4.2,y:6.3,x2:4.2,y2:3.0,kind:"ball"},
-      {type:"arrow",x:4.5,y:4.3,x2:4.5,y2:3.4,kind:"move"},
-      {type:"arrow",x:4.8,y:3.1,x2:4.8,y2:6.2,kind:"ball"}
+      {type:"player",team:"B",label:"2",x:4.5,y:6.5},
+      {type:"player",team:"A",label:"1",path:[{x:4.5,y:4.6},{x:4.5,y:3.4},{x:4.5,y:4.6}]},
+      {type:"ball",path:[{x:4.2,y:6.3},{x:4.2,y:3},{x:4.8,y:6.2}]}
     ]}
   }
 ];
@@ -2563,16 +2495,16 @@ const TACTIQUE = [
   {nom:"Les dispositifs de réception", categorie:"Réception",
    resume:"Comment répartir le terrain pour recevoir le service : qui réceptionne, où, et où se placent ceux qui ne reçoivent pas.",
    schema:{terrain:"half",elements:[
-     {type:"player",team:"A",x:6.6,y:1.6,label:"P"},
-     {type:"player",team:"A",x:2.3,y:1.9,label:"4"},
-     {type:"player",team:"A",x:4.4,y:1.9,label:"3"},
-     {type:"player",team:"A",x:1.8,y:6.3,label:"R"},
-     {type:"player",team:"A",x:4.5,y:7.3,label:"R"},
-     {type:"player",team:"A",x:7.0,y:6.3,label:"R"},
-     {type:"arrow",kind:"pass",x:1.8,y:6.3,x2:6.3,y2:2.0},
-     {type:"arrow",kind:"pass",x:4.5,y:7.3,x2:6.3,y2:2.0},
-     {type:"arrow",kind:"pass",x:7.0,y:6.3,x2:6.3,y2:2.0}
-   ]},
+      {type:"player",team:"A",label:"P",x:6.6,y:1.6},
+      {type:"player",team:"A",label:"4",x:2.3,y:1.9},
+      {type:"player",team:"A",label:"3",x:4.4,y:1.9},
+      {type:"player",team:"A",label:"R",x:1.8,y:6.3},
+      {type:"player",team:"A",label:"R",x:4.5,y:7.3},
+      {type:"player",team:"A",label:"R",x:7,y:6.3},
+      {type:"ball",path:[{x:1.8,y:6.3},{x:6.3,y:2}]},
+      {type:"ball",path:[{x:4.5,y:7.3},{x:6.3,y:2}]},
+      {type:"ball",path:[{x:7,y:6.3},{x:6.3,y:2}]}
+    ]},
    schemaCap:"Réception à 3 : trois réceptionneurs (R) en arc se partagent le terrain et renvoient vers le passeur (P) ; les attaquants de devant (3, 4) restent prêts à attaquer.",
    blocks:[
      {label:"Principe",points:[
@@ -2632,14 +2564,14 @@ const TACTIQUE = [
   {nom:"Les combinaisons et tempos d'attaque", categorie:"Attaque",
    resume:"Varier la vitesse des passes et faire bouger les attaquants pour prendre de vitesse le bloc adverse.",
    schema:{terrain:"half",elements:[
-     {type:"player",team:"A",x:6.0,y:1.7,label:"P"},
-     {type:"player",team:"A",x:4.3,y:1.9,label:"1"},
-     {type:"player",team:"A",x:1.6,y:2.1,label:"3"},
-     {type:"player",team:"A",x:4.5,y:6.0,label:"pipe"},
-     {type:"arrow",kind:"pass",x:6.0,y:1.7,x2:4.6,y2:1.9},
-     {type:"arrow",kind:"pass",x:6.0,y:1.7,x2:1.9,y2:2.1},
-     {type:"arrow",kind:"pass",x:6.0,y:1.7,x2:4.5,y2:5.6}
-   ]},
+      {type:"player",team:"A",label:"P",x:6,y:1.7},
+      {type:"player",team:"A",label:"1",x:4.3,y:1.9},
+      {type:"player",team:"A",label:"3",x:1.6,y:2.1},
+      {type:"player",team:"A",label:"pipe",x:4.5,y:6},
+      {type:"ball",path:[{x:6,y:1.7},{x:4.6,y:1.9}]},
+      {type:"ball",path:[{x:6,y:1.7},{x:1.9,y:2.1}]},
+      {type:"ball",path:[{x:6,y:1.7},{x:4.5,y:5.6}]}
+    ]},
    schemaCap:"Le passeur (P) répartit selon le tempo : balle rapide au central (1), balle haute à l'ailier (3), attaque arrière au centre (pipe).",
    blocks:[
      {label:"Les tempos (1 / 2 / 3)",points:[
@@ -2662,14 +2594,14 @@ const TACTIQUE = [
   {nom:"La couverture de l'attaquant", categorie:"Défense",
    resume:"Se replacer autour de son propre attaquant pour récupérer les ballons renvoyés par le bloc adverse.",
    schema:{terrain:"half",elements:[
-     {type:"player",team:"A",x:1.9,y:1.9,label:"A"},
-     {type:"player",team:"A",x:0.9,y:3.4,label:"C"},
-     {type:"player",team:"A",x:2.8,y:3.1,label:"C"},
-     {type:"player",team:"A",x:4.5,y:3.7,label:"C"},
-     {type:"player",team:"A",x:1.9,y:5.0,label:"C"},
-     {type:"player",team:"A",x:3.7,y:5.4,label:"C"},
-     {type:"arrow",kind:"ball",x:2.2,y:0.6,x2:2.3,y2:3.2}
-   ]},
+      {type:"player",team:"A",label:"A",x:1.9,y:1.9},
+      {type:"player",team:"A",label:"C",x:0.9,y:3.4},
+      {type:"player",team:"A",label:"C",x:2.8,y:3.1},
+      {type:"player",team:"A",label:"C",x:4.5,y:3.7},
+      {type:"player",team:"A",label:"C",x:1.9,y:5},
+      {type:"player",team:"A",label:"C",x:3.7,y:5.4},
+      {type:"ball",path:[{x:2.2,y:0.6},{x:2.3,y:3.2}]}
+    ]},
    schemaCap:"L'attaquant (A) frappe en zone 4 ; les autres (C) forment un arc autour de lui pour récupérer un ballon renvoyé par le bloc (flèche).",
    blocks:[
      {label:"Principe",points:[
@@ -2692,15 +2624,13 @@ const TACTIQUE = [
   {nom:"La transition défense → attaque", categorie:"Attaque",
    resume:"Passer de la posture de défense à une attaque organisée — ce qui sépare « défendre » de « contre-attaquer ».",
    schema:{terrain:"half",elements:[
-     {type:"player",team:"A",x:4.5,y:1.9,label:"3"},
-     {type:"player",team:"A",x:1.9,y:1.7,label:"4"},
-     {type:"player",team:"A",x:7.2,y:1.8,label:"2"},
-     {type:"player",team:"A",x:6.3,y:2.1,label:"P"},
-     {type:"arrow",kind:"move",x:1.9,y:2.1,x2:1.9,y2:4.4},
-     {type:"arrow",kind:"move",x:7.2,y:2.2,x2:7.2,y2:4.4},
-     {type:"arrow",kind:"move",x:6.3,y:6.6,x2:6.3,y2:2.4},
-     {type:"arrow",kind:"ball",x:4.3,y:7.2,x2:6.1,y2:2.3}
-   ]},
+      {type:"player",team:"A",label:"3",x:4.5,y:1.9},
+      {type:"player",team:"A",label:"4",path:[{x:1.9,y:1.7},{x:1.9,y:4.4},{x:1.9,y:1.7}]},
+      {type:"player",team:"A",label:"2",path:[{x:7.2,y:1.8},{x:7.2,y:4.4},{x:7.2,y:1.8}]},
+      {type:"player",team:"A",label:"P",x:6.3,y:2.1},
+      {type:"player",team:"A",label:"",path:[{x:6.3,y:6.6},{x:6.3,y:2.4}]},
+      {type:"ball",path:[{x:4.3,y:7.2},{x:6.1,y:2.3}]}
+    ]},
    schemaCap:"Après la défense, les attaquants (4, 2) se dégagent du filet pour prendre leur élan ; le passeur (P) rejoint sa cible, la relance (balle) vient du fond.",
    blocks:[
      {label:"Enchaîner défense puis attaque",points:[
