@@ -366,7 +366,7 @@ const EXERCICES = [
       {type:"label",label:"4 squats",x:1.5,y:8.6},
       {type:"cone",x:4.5,y:4.5},
       {type:"label",label:"5 climbers",x:4.5,y:5.6},
-      {type:"player",team:"A",label:"",path:[{x:1.9,y:1.5},{x:7.1,y:1.5},{x:7.5,y:7.1},{x:1.9,y:7.5}]}
+      {type:"player",team:"A",label:"",path:[{x:1.5,y:1.5},{x:7.5,y:1.5},{x:7.5,y:7.5},{x:1.5,y:7.5},{x:4.5,y:4.5}]}
     ]}
   },
   {
@@ -1087,10 +1087,8 @@ const EXERCICES = [
       "À plusieurs : se relayer sur un même mur, ou enchaîner passe au mur puis passe à un partenaire."
     ],
     schema:{terrain:"wall",elements:[
-      {type:"label",label:"mur",x:1,y:0.55},
-      {type:"player",team:"A",label:"1",x:4.5,y:5.2},
-      {type:"ball",path:[{x:4.1,y:4.1},{x:4.1,y:0.6},{x:4.9,y:4.1}]},
-      {type:"label",label:"varie la distance",x:4.5,y:6.1}
+      {type:"player",team:"A",label:"1",x:4.5,y:4.5},
+      {type:"ball",path:[{x:4.1,y:4.1},{x:4.5,y:0.6},{x:4.9,y:4.1}]}
     ]}
   },
   {
@@ -1115,10 +1113,8 @@ const EXERCICES = [
       "À plusieurs : se relayer sur un même mur, ou alterner manchette au mur puis manchette à un partenaire."
     ],
     schema:{terrain:"wall",elements:[
-      {type:"label",label:"mur",x:1,y:0.55},
-      {type:"player",team:"A",label:"1",x:4.5,y:5.2},
-      {type:"ball",path:[{x:4.1,y:4.1},{x:4.1,y:0.6},{x:4.9,y:4.1}]},
-      {type:"label",label:"varie la distance",x:4.5,y:6.1}
+      {type:"player",team:"A",label:"1",x:4.5,y:4.5},
+      {type:"ball",path:[{x:4.1,y:4.1},{x:4.5,y:0.6},{x:4.9,y:4.1}]}
     ]}
   },
   {
@@ -1144,10 +1140,9 @@ const EXERCICES = [
       "À plusieurs : se relayer sur un même mur, l'un frappe, l'autre récupère et relance."
     ],
     schema:{terrain:"wall",elements:[
-      {type:"label",label:"mur",x:1,y:0.55},
-      {type:"player",team:"A",label:"1",x:6,y:4.8},
-      {type:"ball",path:[{x:5.3,y:3.6},{x:3.6,y:4.7},{x:2.1,y:0.7},{x:5.3,y:3.8}]},
-      {type:"label",label:"rebond au sol",x:3.5,y:5.4}
+      {type:"player",team:"A",label:"1",x:4.5,y:4.5},
+      {type:"ball",path:[{x:4.1,y:4.1},{x:4.5,y:0.6},{x:4.9,y:4.1}]},
+      {type:"label",label:"rebond au sol",x:4.5,y:5.5}
     ]}
   },
 
@@ -1530,9 +1525,9 @@ const EXERCICES = [
     consignes:["Contrôle amorti, cheville souple","Regard sur le ballon puis sur la cible avant de passer","Rester sur des appuis dynamiques, genoux fléchis"],
     variantes:["Plus dur : un seul contact, passe directe sans contrôle","Plus dur : augmenter la distance et la vitesse d'échange","Plus facile : contrôle autorisé en deux ou trois touches"],
     schema:{terrain:"half",elements:[
-      {type:"player",team:"A",label:"1",path:[{x:3,y:4},{x:5.6,y:3.6},{x:3,y:4}]},
-      {type:"player",team:"B",label:"2",x:6,y:4},
-      {type:"ball",x:4.5,y:4}
+      {type:"player",team:"A",label:"1",x:2,y:4},
+      {type:"player",team:"B",label:"2",x:7,y:4},
+      {type:"ball",path:[{x:2.5,y:4.5},{x:6.5,y:3.5},{x:6.5,y:4.5},{x:2.5,y:3.5}],loop:true}
     ]}
   },
   {
@@ -1590,12 +1585,12 @@ const EXERCICES = [
     consignes:["Départ explosif dès le lancer, course la plus directe possible","Finir en position basse pour jouer la balle courte","Renvoi contrôlé par-dessus le filet, pas en force"],
     variantes:["Plus dur : lancers plus rapprochés, ou balles plus courtes près du filet","Plus facile : balle lancée plus haut et plus lente, une seule colonne"],
     schema:{terrain:"half",elements:[
-      {type:"player",x:4.5,y:0.6,team:"B",label:"C"},
+      {type:"player",x:4.5,y:0.6,team:"C",label:"C"},
       {type:"zone",x:2.0,y:1.5,w:1.2,h:1.2},
       {type:"zone",x:5.8,y:1.5,w:1.2,h:1.2},
-      {type:"ball",path:[{x:4.3,y:0.9},{x:2.6,y:2.1}]},
+      {type:"ball",path:[{x:4.3,y:0.9},{x:2.6,y:2.1}],delay:1.5},
       {type:"ball",path:[{x:4.7,y:0.9},{x:6.4,y:2.1}]},
-      {type:"player",team:"A",label:"1",path:[{x:2.6,y:8.5},{x:2.6,y:2.6}]},
+      {type:"player",team:"A",label:"1",path:[{x:2.6,y:8.5},{x:2.6,y:2.6}],delay:1.5},
       {type:"player",team:"A",label:"2",path:[{x:6.4,y:8.5},{x:6.4,y:2.6}]}
     ]}
   },

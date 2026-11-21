@@ -100,7 +100,7 @@ function courtSVG(schema, mini){
       const base = e.team==="B"?"pl pl-b":e.team==="C"?"pl pl-c":"pl pl-a";
       const p0 = (e.path&&e.path.length)?e.path[0]:e;
       const mv = !mini && e.path && e.path.length>1;
-      const dp = mv?` data-path="${pathData(e.path)}"${e.loop?' data-loop="1"':''}`:"";
+      const dp = mv?` data-path="${pathData(e.path)}"${e.loop?' data-loop="1"':''}${e.delay?` data-delay="${+e.delay}"`:''}`:"";
       s+=`<g class="${base}${mv?" sch-move":""}"${dp}><circle cx="${o(p0.x)}" cy="${o(p0.y)}" r="0.52"/>`;
       if(e.label&&!mini) s+=`<text x="${o(p0.x)}" y="${o(p0.y)}" class="pl-label">${esc(e.label)}</text>`;
       s+=`</g>`;
@@ -118,7 +118,7 @@ function courtSVG(schema, mini){
     if(e.type==="ball"){
       const b0=(e.path&&e.path.length)?e.path[0]:e;
       const mv=!mini && e.path && e.path.length>1;
-      const dp=mv?` data-path="${pathData(e.path)}"${e.loop?' data-loop="1"':''}`:"";
+      const dp=mv?` data-path="${pathData(e.path)}"${e.loop?' data-loop="1"':''}${e.delay?` data-delay="${+e.delay}"`:''}`:"";
       s+=`<circle cx="${o(b0.x)}" cy="${o(b0.y)}" r="0.3" class="sch-ball${mv?" sch-move":""}"${dp}/>`;
     }
   }
@@ -170,7 +170,8 @@ function startSchemaMotion(scope){
   scope.querySelectorAll("svg.sch-anim").forEach(svg=>{
     const movers=[...svg.querySelectorAll(".sch-move")].map(el=>{
       let pts=null; try{ pts=JSON.parse(el.getAttribute("data-path")); }catch(e){}
-      return {el, pts, loop: el.getAttribute("data-loop")==="1"};
+      const delay=parseFloat(el.getAttribute("data-delay"))*1000;
+      return {el, pts, loop: el.getAttribute("data-loop")==="1", delay: delay>0?delay:0};
     }).filter(m=>m.pts && m.pts.length>1);
     if(!movers.length) return;
     // Chaque élément a SA propre période : un chemin plus court ne patiente pas pour
@@ -179,13 +180,16 @@ function startSchemaMotion(scope){
     // (pts[i][2]===1) saute le freeze (0,5 s intermédiaire) ou l'attente (1 s début/fin).
     // loop : pas de téléportation fin→départ ; segment de fermeture fluide, et départ
     // comme arrivée deviennent de simples points intermédiaires (freeze 0,5 s).
+    // delay (s) : décalage de phase au démarrage (préfixe unique hors période). Il NE modifie
+    // PAS la durée du cycle → deux éléments de même longueur de chemin gardent la même période
+    // et restent en alternance permanente (le décalage relatif est figé une fois pour toutes).
+    // Avant la fin du délai l'élément reste à son point de départ, puis il entre dans sa boucle.
     movers.forEach(m=>{
-      const pts=m.pts, M=pts.length-1, ns=i=>pts[i][2]===1;
+      const pts=m.pts, M=pts.length-1, ns=i=>pts[i][2]===1, d=m.delay;
       const kf=[{t:0,p:pts[0]}];
-      let t;
+      let t=0;
       if(m.loop){
-        t=ns(0)?0:SCH_FREEZE;
-        if(t>0) kf.push({t,p:pts[0]});
+        const lead=ns(0)?0:SCH_FREEZE; if(lead>0){ t+=lead; kf.push({t,p:pts[0]}); }
         for(let k=0;k<M;k++){
           t+=SCH_MOVE; kf.push({t,p:pts[k+1]});
           const dwell=ns(k+1)?0:SCH_FREEZE;
@@ -193,8 +197,8 @@ function startSchemaMotion(scope){
         }
         t+=SCH_MOVE; kf.push({t,p:pts[0]});   // fermeture : retour fluide au départ
       }else{
-        t=ns(0)?0:SCH_HOLD;
-        if(t>0) kf.push({t,p:pts[0]});
+        const startHold=ns(0)?0:SCH_HOLD;     // identique pour tous → période indépendante du délai
+        if(startHold>0){ t+=startHold; kf.push({t,p:pts[0]}); }
         for(let k=0;k<M;k++){
           t+=SCH_MOVE; kf.push({t,p:pts[k+1]});
           const dwell=(k+1===M)?(ns(M)?0:SCH_HOLD):(ns(k+1)?0:SCH_FREEZE);
@@ -202,6 +206,7 @@ function startSchemaMotion(scope){
         }
       }
       m.kf=kf; m.T=t||SCH_MOVE; m.x0=pts[0][0]; m.y0=pts[0][1];
+      m.prefix=d>0?d:0;   // décalage de départ unique (phase), loop ET non-loop ; n'affecte pas la période
     });
     const id=String(++schMotionSeq);
     svg.dataset.motion=id;
@@ -210,7 +215,8 @@ function startSchemaMotion(scope){
       if(!document.contains(svg) || svg.dataset.motion!==id) return;   // arrêt propre
       const el=now - t0;
       movers.forEach(m=>{
-        const [x,y]=schSample(m.kf, el % m.T);
+        const e=el - m.prefix;                      // préfixe unique (loop + délai) ; sinon 0
+        const [x,y]=e<=0?[m.x0,m.y0]:schSample(m.kf, e % m.T);
         m.el.setAttribute("transform", `translate(${(x-m.x0).toFixed(3)} ${(y-m.y0).toFixed(3)})`);
       });
       requestAnimationFrame(frame);
