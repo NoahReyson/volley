@@ -1417,6 +1417,10 @@ CONTENT_EN.exercices={
  "Course au renvoi":{nom:"Running return", materiel:"A basket of balls", objectif:"Work on movement speed and returning on the run: start from the back of the court to chase a short ball near the net.",
   deroule:["Split the players into 2 groups, in columns behind the end line.","The coach, at the net with a basket of balls, sends a ball toward the net, into one of the 2 zones facing the groups.","The first player of each column sprints to reach the ball and send it back over the net.","Chain the tosses at a fast pace, then rotate to the back of the column."],
   consignes:["Explosive start on the toss, run as direct as possible","Finish low to play the short ball","Controlled return over the net, not hit hard"],
-  variantes:["Harder: tosses closer together, or balls shorter near the net","Easier: a ball tossed higher and slower, a single column"]}
+  variantes:["Harder: tosses closer together, or balls shorter near the net","Easier: a ball tossed higher and slower, a single column"]},
+ "Manchette de dos":{nom:"Overhead back pass", materiel:"Balls", objectif:"Work on the overhead forearm pass behind you: the recovery move when the ball flies over the player and must be sent back over their head.",
+  deroule:["Two players about 2 m apart, the first with their back to their partner.","The partner tosses a high, looping ball far over the first player (toward the front).","The first player gets under the ball and sends it back with a forearm pass over their head, behind them, to the partner.","Chain several balls, then switch roles."],
+  consignes:["Read the trajectory early and move to get under the ball","Forearm platform angled backward, push with the legs","A high return to give the partner time to play"],
+  variantes:["Harder: vary the toss length and speed the ball up","Over the net: place the players on each side and return over the net"]}
 };
 /* ===EN_NEXT=== */

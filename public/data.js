@@ -1664,6 +1664,27 @@ const EXERCICES = [
       {type:"arrow",x:2.6,y:8.2,x2:2.6,y2:2.8,kind:"move"},
       {type:"arrow",x:6.4,y:8.2,x2:6.4,y2:2.8,kind:"move"}
     ]}
+  },
+  {
+    nom:"Manchette de dos",
+    themes:["Réception","Défense"], niveau:"Intermédiaire", joueurs:{min:2,max:16}, duree:10,
+    materiel:"Des ballons",
+    objectif:"Travailler la manchette haute vers l'arrière (au-dessus de la tête) : le geste de rattrapage quand la balle passe au-dessus du joueur et qu'il doit la renvoyer dans son dos.",
+    deroule:[
+      "Deux joueurs espacés d'environ 2 m, le 1er tournant le dos à son partenaire.",
+      "Le partenaire envoie une balle en cloche, loin au-dessus du 1er joueur (vers l'avant).",
+      "Le 1er joueur part sous la balle et la renvoie en manchette par-dessus sa tête, dans son dos, vers le partenaire.",
+      "Enchaîner plusieurs ballons, puis inverser les rôles."
+    ],
+    consignes:["Lire vite la trajectoire et se déplacer pour passer sous la balle","Plateau de manchette orienté vers l'arrière, pousser avec les jambes","Renvoi haut pour laisser le temps au partenaire de jouer"],
+    variantes:["Plus dur : varier la longueur du lancer et accélérer la balle","Au filet : placer les joueurs de part et d'autre et renvoyer par-dessus le filet"],
+    schema:{terrain:"half",elements:[
+      {type:"player",x:4.5,y:6.5,team:"B",label:"2"},
+      {type:"player",x:4.5,y:4.6,team:"A",label:"1"},
+      {type:"arrow",x:4.2,y:6.3,x2:4.2,y2:3.0,kind:"ball"},
+      {type:"arrow",x:4.5,y:4.3,x2:4.5,y2:3.4,kind:"move"},
+      {type:"arrow",x:4.8,y:3.1,x2:4.8,y2:6.2,kind:"ball"}
+    ]}
   }
 ];
 
