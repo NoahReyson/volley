@@ -306,6 +306,7 @@ function render(){
     card.addEventListener("click",()=>openExercise(i));
     grid.appendChild(card);
   });
+  renderTheoryShelf();
 }
 
 /* =========================================================================
@@ -576,44 +577,188 @@ function initBurger(){
   document.getElementById("themeBtn").addEventListener("click",closeTools);
 }
 
-/* ---- séance (localStorage, 1 séance courante, pas d'historique) ---- */
+/* ---- séance : liste de blocs typés {t:"ex"|"th", s?:section, k:nom FR} ----
+   "ex" = exercice (liste EXERCICES).
+   "th" = explication théorique réutilisant une fiche existante
+          (techniques / postes / formations / tactique) ; durée fixe 10 min.
+   Les blocs théorie s'affichent dans la séance comme les exercices mais ne
+   sont jamais mélangés à la grille des exercices disponibles. */
 let currentEx=null;
-function loadSeance(){ try{ const a=JSON.parse(localStorage.getItem("cv-seance")||"[]"); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+const THEORIE_SECTIONS=["techniques","postes","formations","tactique"];
+const THEORIE_DUREE=10;
+function loadSeance(){
+  try{
+    const a=JSON.parse(localStorage.getItem("cv-seance")||"[]");
+    if(!Array.isArray(a)) return [];
+    // tolère l'ancien format (tableau de noms) sans garantie de migration
+    return a.map(e=> typeof e==="string" ? {t:"ex",k:e} : e)
+            .filter(b=> b && b.k && (b.t==="ex" || (b.t==="th" && THEORIE_SECTIONS.includes(b.s))));
+  }catch(e){ return []; }
+}
 function saveSeance(){ try{ localStorage.setItem("cv-seance", JSON.stringify(seance)); }catch(e){} }
 let seance = loadSeance();
-function inSeance(ex){ return seance.includes(ex.nom); }
-function updateAddBtn(el,ex){ if(!el) return; const on=inSeance(ex); el.classList.toggle("added",on); el.setAttribute("aria-disabled",on?"true":"false"); el.textContent=on?T('added'):T('add'); }
-function addToSeance(ex){ if(inSeance(ex)) return; seance.push(ex.nom);
-  if(matchMedia("(min-width:980px)").matches && !document.body.classList.contains("sn-open")) document.body.classList.add("sn-open");
-  afterSeanceChange(); }
-function removeFromSeance(nom){ seance=seance.filter(n=>n!==nom); afterSeanceChange(); }
+function theorieCatLabel(section){ return infoMeta(section).eyebrow; }
+function inSeanceEx(nom){ return seance.some(b=>b.t==="ex"&&b.k===nom); }
+function inSeanceTh(section,nom){ return seance.some(b=>b.t==="th"&&b.s===section&&b.k===nom); }
+function updateAddBtn(el,ex){ if(!el) return; const on=inSeanceEx(ex.nom); el.classList.toggle("added",on); el.setAttribute("aria-disabled",on?"true":"false"); el.textContent=on?T('added'):T('add'); }
+function updateInfoAddBtn(el,section,nom){ if(!el) return; const on=inSeanceTh(section,nom); el.classList.toggle("added",on); el.setAttribute("aria-disabled",on?"true":"false"); el.textContent=on?T('added'):T('add'); }
+function openSnIfLarge(){ if(matchMedia("(min-width:980px)").matches && !document.body.classList.contains("sn-open")) document.body.classList.add("sn-open"); }
+function addToSeance(ex){ if(inSeanceEx(ex.nom)) return; seance.push({t:"ex",k:ex.nom}); openSnIfLarge(); afterSeanceChange(); }
+function addTheorieToSeance(section,nom){ if(inSeanceTh(section,nom)) return; seance.push({t:"th",s:section,k:nom}); openSnIfLarge(); afterSeanceChange(); }
+function removeFromSeanceAt(i){ if(i<0||i>=seance.length) return; seance.splice(i,1); afterSeanceChange(); }
 function clearSeance(){ seance=[]; afterSeanceChange(); }
 function afterSeanceChange(){
   saveSeance(); renderSeanceList(); updateSeanceStats();
   if(document.body.dataset.view==="detail"){ const sa=document.getElementById("sheetAdd"); if(sa&&currentEx) updateAddBtn(sa,currentEx); }
+  else if(document.body.dataset.iview==="detail" && THEORIE_SECTIONS.includes(curSection) && curInfoIdx>=0 && INFO[curSection]){
+    const ia=document.getElementById("infoAdd"); if(ia) updateInfoAddBtn(ia,curSection,INFO[curSection].items[curInfoIdx].nom);
+  }
   else render();
+}
+/* résout un bloc de séance en {nom affiché, méta HTML, ouverture} selon son type */
+function snItemMeta(b){
+  if(b.t==="th"){
+    const idx=INFO[b.s]?INFO[b.s].items.findIndex(x=>x.nom===b.k):-1;
+    if(idx<0) return null;
+    const it=L(INFO[b.s].items[idx],b.s);
+    return {name:it.nom, meta:`<span class="sn-badge-th">${esc(T('theory_tag'))}</span> ${esc(theorieCatLabel(b.s))} · ${THEORIE_DUREE} ${esc(T('min'))}`, open:()=>openInfo(b.s,idx)};
+  }
+  const ex=EXERCICES.find(e=>e.nom===b.k);
+  if(!ex) return null;
+  const gi=EXERCICES.indexOf(ex);
+  return {name:L(ex,'exercices').nom, meta:`${esc(themeLabel(ex.themes[0]))} · ${ex.duree} ${esc(T('min'))}`, open:()=>openExercise(gi)};
 }
 function renderSeanceList(){
   const list=document.getElementById("snList"); if(!list) return;
   if(!seance.length){ list.innerHTML=`<div class="sn-empty">${T('seance_empty')}</div>`; return; }
   list.innerHTML="";
-  seance.forEach(nom=>{
-    const ex=EXERCICES.find(e=>e.nom===nom); if(!ex) return;
-    const i=EXERCICES.indexOf(ex);
-    const it=document.createElement("div"); it.className="sn-item";
-    it.innerHTML=`<button class="sn-item-main" type="button"><span class="sn-item-name">${esc(L(ex,'exercices').nom)}</span><span class="sn-item-meta">${esc(themeLabel(ex.themes[0]))} · ${ex.duree} ${esc(T('min'))}</span></button><button class="sn-item-del" type="button" aria-label="Retirer">✕</button>`;
-    it.querySelector(".sn-item-main").addEventListener("click",()=>{ closeSnOnSmall(); openExercise(i); });
-    it.querySelector(".sn-item-del").addEventListener("click",()=>removeFromSeance(nom));
+  seance.forEach((b,i)=>{
+    const m=snItemMeta(b); if(!m) return;
+    const it=document.createElement("div"); it.className="sn-item"+(b.t==="th"?" sn-theory":""); it.dataset.idx=i;
+    it.innerHTML=`<span class="sn-drag" role="button" tabindex="0" aria-label="${esc(T('reorder'))}" title="${esc(T('reorder'))}">⠿</span>`
+      +`<button class="sn-item-main" type="button"><span class="sn-item-name">${esc(m.name)}</span><span class="sn-item-meta">${m.meta}</span></button>`
+      +`<button class="sn-item-del" type="button" aria-label="${esc(T('remove'))}">✕</button>`;
+    it.querySelector(".sn-item-main").addEventListener("click",()=>{ closeSnOnSmall(); m.open(); });
+    // lit l'index courant (le réordre met à jour dataset.idx sans reconstruire la liste)
+    it.querySelector(".sn-item-del").addEventListener("click",()=>removeFromSeanceAt(parseInt(it.dataset.idx,10)));
+    attachSnDrag(it.querySelector(".sn-drag"), it, list);
     list.appendChild(it);
   });
 }
 function updateSeanceStats(){
   const n=seance.length;
   let dur=0;
-  seance.forEach(nom=>{ const ex=EXERCICES.find(e=>e.nom===nom); if(ex) dur+=ex.duree; });
-  const c=document.getElementById("snCount"); if(c) c.textContent=T('ex_count')(n);
+  seance.forEach(b=>{ if(b.t==="th") dur+=THEORIE_DUREE; else { const ex=EXERCICES.find(e=>e.nom===b.k); if(ex) dur+=ex.duree; } });
+  const c=document.getElementById("snCount"); if(c) c.textContent=T('seance_count')(n);
   const d=document.getElementById("snDur"); if(d) d.textContent=dur+" "+T('min');
   const badge=document.getElementById("snBadge"); if(badge){ badge.textContent=n; badge.style.display=n>0?"":"none"; }
+}
+/* réordonnancement de la séance en glisser-déposer (souris + tactile, pointer events),
+   avec animation FLIP : l'élément saisi suit le pointeur (soulevé), les autres glissent
+   en douceur à leur nouvelle place. L'ordre n'est validé qu'au relâcher. */
+const SN_ANIM="transform .18s cubic-bezier(.2,.7,.3,1)";
+const SN_REDUCE=matchMedia("(prefers-reduced-motion: reduce)");   // respecte le réglage système
+/* FLIP : mémorise la position des autres items, réordonne, puis les laisse glisser du
+   delta inversé vers 0. */
+function snFlipReorder(list, dragged, ref){
+  const movers=[...list.querySelectorAll(".sn-item:not(.dragging)")];
+  const firstTop=new Map();
+  movers.forEach(el=> firstTop.set(el, el.getBoundingClientRect().top));
+  if(ref) list.insertBefore(dragged, ref); else list.appendChild(dragged);
+  if(SN_REDUCE.matches) return;   // pas d'animation si l'utilisateur la refuse
+  movers.forEach(el=>{
+    const dy=firstTop.get(el) - el.getBoundingClientRect().top;
+    if(!dy) return;
+    el.style.transition="none";
+    el.style.transform=`translateY(${dy}px)`;
+    el.getBoundingClientRect();     // reflow : fige l'état « inversé » avant de jouer
+    el.style.transition=SN_ANIM;
+    el.style.transform="";
+  });
+}
+function snClearDragStyles(list){
+  list.querySelectorAll(".sn-item").forEach(el=>{ el.style.transition=""; el.style.transform=""; el.style.zIndex=""; });
+}
+function snReorderCommit(list){
+  const order=[...list.querySelectorAll(".sn-item")].map(el=>parseInt(el.dataset.idx,10));
+  const next=order.map(i=>seance[i]).filter(Boolean);
+  if(next.length!==seance.length){ renderSeanceList(); return; }   // garde-fou
+  seance=next; saveSeance();
+  // ré-indexe sans reconstruire le DOM (préserve l'animation de dépose)
+  [...list.querySelectorAll(".sn-item")].forEach((el,i)=>{ el.dataset.idx=i; });
+  updateSeanceStats();
+}
+function attachSnDrag(handle, it, list){
+  if(!handle) return;
+  handle.addEventListener("pointerdown",e=>{
+    e.preventDefault();
+    const grabOffset=e.clientY - it.getBoundingClientRect().top;   // position du pointeur dans l'item
+    let curTy=0;
+    it.classList.add("dragging");
+    it.style.transition="none";
+    // colle l'élément saisi sous le pointeur, quelle que soit sa place courante dans le flux
+    const glue=clientY=>{
+      const rect=it.getBoundingClientRect();
+      const naturalTop=rect.top - curTy;
+      curTy=(clientY - grabOffset) - naturalTop;
+      it.style.transform=`translateY(${curTy}px)`;
+    };
+    const move=ev=>{
+      ev.preventDefault();
+      const y=ev.clientY;
+      let ref=null;
+      for(const other of list.querySelectorAll(".sn-item:not(.dragging)")){
+        const r=other.getBoundingClientRect();
+        if(y < r.top + r.height/2){ ref=other; break; }
+      }
+      const already = ref ? (it.nextElementSibling===ref) : (it===list.lastElementChild);
+      if(!already) snFlipReorder(list, it, ref);
+      glue(y);
+    };
+    const up=()=>{
+      window.removeEventListener("pointermove",move);
+      window.removeEventListener("pointerup",up);
+      window.removeEventListener("pointercancel",up);
+      let to=null, settled=false;
+      const settle=()=>{
+        if(settled) return; settled=true;
+        if(to) clearTimeout(to);
+        it.removeEventListener("transitionend",settle);
+        it.classList.remove("dragging");
+        snClearDragStyles(list);
+        snReorderCommit(list);
+      };
+      // dépose en douceur : l'élément glisse de sa position courante jusqu'à sa place
+      it.style.transition=SN_ANIM;
+      it.style.transform="";
+      if(SN_REDUCE.matches || Math.abs(curTy)<0.5){ settle(); }
+      else { it.addEventListener("transitionend",settle); to=setTimeout(settle,240); }
+    };
+    window.addEventListener("pointermove",move);
+    window.addEventListener("pointerup",up);
+    window.addEventListener("pointercancel",up);
+  });
+}
+/* encart « Explications théoriques » (sous la grille des exercices) : réutilise
+   les fiches existantes, donc jamais dans la grille ni les filtres des exercices. */
+function renderTheoryShelf(){
+  const list=document.getElementById("theoryList"); if(!list) return;
+  list.innerHTML="";
+  THEORIE_SECTIONS.forEach(section=>{
+    if(!INFO[section]) return;
+    INFO[section].items.forEach((it0,i)=>{
+      const it=L(it0,section);
+      const row=document.createElement("div"); row.className="theory-item";
+      row.innerHTML=`<button class="theory-item-main" type="button"><span class="theory-item-cat">${esc(theorieCatLabel(section))}</span><span class="theory-item-name">${esc(it.nom)}</span></button><span class="theory-item-add card-add" role="button" tabindex="0">${esc(T('add'))}</span>`;
+      row.querySelector(".theory-item-main").addEventListener("click",()=>openInfo(section,i));
+      const add=row.querySelector(".theory-item-add");
+      updateInfoAddBtn(add,section,it0.nom);
+      const doAdd=ev=>{ ev.stopPropagation(); addTheorieToSeance(section,it0.nom); };
+      add.addEventListener("click",doAdd);
+      add.addEventListener("keydown",ev=>{ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); doAdd(ev); } });
+      list.appendChild(row);
+    });
+  });
 }
 function closeSnOnSmall(){ if(!matchMedia("(min-width:980px)").matches) document.body.classList.remove("sn-open"); }
 function setNavH(){ const t=document.querySelector(".topbar"); if(t) document.documentElement.style.setProperty("--nav-h", t.offsetHeight+"px"); }
@@ -831,10 +976,14 @@ function renderInfoDetail(key,i){
   }
   sheet.classList.remove("sheet-tool");
   const it = key==="techniques" ? techToItem(L(it0,'techniques')) : L(it0,key);
+  const addable=THEORIE_SECTIONS.includes(key);   // fiches ajoutables à une séance
   const block=b=>`<div class="tech-level"><span class="tech-level-h ${b.cls||'plain'}">${esc(b.label)}</span>${b.intro?`<p class="tech-intro">${esc(b.intro)}</p>`:""}<ul class="${b.cls==='err'?'var':'pts'}">${b.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`;
   sheet.innerHTML=`
     <div class="sheet-head">
-      <div class="sheet-eyebrow">${esc(sec.eyebrow)} · ${esc(it.categorie)}</div>
+      <div class="sheet-head-top">
+        <div class="sheet-eyebrow">${esc(sec.eyebrow)} · ${esc(it.categorie)}</div>
+        ${addable?`<div class="sheet-actions"><button class="sheet-add" id="infoAdd" type="button">${esc(T('add'))}</button></div>`:""}
+      </div>
       <h2>${esc(it.nom)}</h2>
     </div>
     <div class="tech-body">
@@ -843,6 +992,7 @@ function renderInfoDetail(key,i){
       ${it.blocks.map(block).join("")}
     </div>`;
   animateSchema(sheet);
+  if(addable){ const ia=sheet.querySelector("#infoAdd"); if(ia){ updateInfoAddBtn(ia,key,it0.nom); ia.addEventListener("click",()=>addTheorieToSeance(key,it0.nom)); } }
   document.getElementById("infoBack").textContent="← "+sec.back;
   document.getElementById("infoPos").textContent=`${i+1} / ${sec.items.length}`;
   document.getElementById("infoPrev").disabled=i<=0;
@@ -926,7 +1076,7 @@ function routeFromHash(){
 }
 function initInfo(){
   INFO_KEYS.forEach(key=>{ const el=document.getElementById("seg-"+key); if(el) el.addEventListener("click",()=>showInfoList(key)); });
-  document.getElementById("seg-ex").addEventListener("click",goExercices);
+  document.getElementById("seg-ex").addEventListener("click",()=>goExercices());
   document.getElementById("infoBack").addEventListener("click",infoBack);
   document.getElementById("infoPrev").addEventListener("click",()=>infoGo(-1));
   document.getElementById("infoNext").addEventListener("click",()=>infoGo(1));

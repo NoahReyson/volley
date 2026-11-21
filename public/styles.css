@@ -434,8 +434,27 @@ body.sn-open .sn-backdrop{opacity:1;visibility:visible}
 .card-add{margin-left:auto;align-self:center;cursor:pointer;border:1px solid var(--accent);background:var(--accent);color:#fff;font-family:var(--f-head);font-weight:600;font-size:12px;letter-spacing:.3px;text-transform:uppercase;padding:5px 11px;border-radius:999px;white-space:nowrap;transition:.12s}
 .card-add:hover{filter:brightness(1.06)}
 .card-add.added{background:var(--surface-2);border-color:var(--line);color:var(--muted);cursor:default;filter:none}
+
+/* séance : poignée de réordonnancement (glisser-déposer) + repère des blocs théorie */
+.sn-drag{flex:none;width:22px;height:30px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:grab;font-size:15px;line-height:1;border-radius:7px;touch-action:none;user-select:none}
+.sn-drag:hover{background:var(--accent-soft);color:var(--accent)}
+.sn-item.dragging{position:relative;z-index:5;background:var(--surface-2);border-radius:10px;border-bottom-color:transparent;box-shadow:0 10px 24px rgba(10,16,24,.3);opacity:.98;cursor:grabbing;user-select:none}
+.sn-drag:active{cursor:grabbing}
+.sn-badge-th{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px;letter-spacing:.3px;vertical-align:1px}
+
+/* encart « Explications théoriques » (sous la grille des exercices) */
+.theory-shelf{margin-top:30px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow);padding:18px 20px}
+.theory-shelf-head h2{font-family:var(--f-head);font-size:19px;font-weight:600;letter-spacing:.2px}
+.theory-shelf-head p{color:var(--muted);font-size:14px;margin-top:4px;line-height:1.5}
+.theory-shelf-list{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.theory-item{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:8px 10px 8px 12px;background:var(--surface-2)}
+.theory-item-main{flex:1;min-width:0;text-align:left;cursor:pointer;background:none;border:none;color:var(--fg);padding:2px 0}
+.theory-item-main:hover .theory-item-name{color:var(--accent)}
+.theory-item-cat{display:block;font-family:var(--f-head);font-weight:600;font-size:10.5px;letter-spacing:.4px;text-transform:uppercase;color:var(--accent)}
+.theory-item-name{display:block;font-weight:600;font-size:14px;line-height:1.25;margin-top:1px}
+.theory-item-add{flex:none;margin-left:0;align-self:center}
 @media(min-width:980px){
-  body.sn-open[data-section="exercices"] .page{margin-right:300px}
+  body.sn-open .page{margin-right:300px}
   body.sn-open .sn-backdrop{opacity:0;visibility:hidden}
   .sidenav{box-shadow:none}
 }
@@ -460,7 +479,6 @@ body.sn-open .sn-backdrop{opacity:1;visibility:visible}
 body[data-iview="list"] .infolist{display:block}
 body[data-iview="detail"] .infodetail{display:block}
 body[data-iview] #listview,body[data-iview] #detail{display:none!important}
-body[data-iview] .sn-toggle,body[data-iview] .sidenav,body[data-iview] .sn-backdrop{display:none!important}
 .tech-level-h.plain{background:var(--blue-soft);color:var(--blue)}
 /* navbar : sélecteur déroulant sous grand écran (les entrées + la recherche ne tiennent pas en ligne) */
 @media(max-width:1600px){

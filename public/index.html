@@ -136,6 +136,16 @@
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty" hidden><b data-i18n="empty_b">Aucun exercice ne correspond</b><span data-i18n="empty_p">Élargis les filtres ou réinitialise.</span></div>
 
+    <!-- Explications théoriques : rappels (technique/poste/formation/tactique)
+         ajoutables à une séance, à part de la grille des exercices. -->
+    <section class="theory-shelf" id="theoryShelf" aria-label="Explications théoriques">
+      <div class="theory-shelf-head">
+        <h2 data-i18n="theory_shelf_h">Explications théoriques</h2>
+        <p data-i18n="theory_shelf_p">Des rappels théoriques (technique, poste, formation, tactique) à ajouter à une séance. Ils n'apparaissent pas dans la liste des exercices.</p>
+      </div>
+      <div class="theory-shelf-list" id="theoryList"></div>
+    </section>
+
     <details class="howto">
       <summary data-i18n="howto_sum">Comment ajouter un exercice (document évolutif)</summary>
       <p style="margin-top:12px">Tout est dans la liste <code>EXERCICES</code> en haut du script. Pour en ajouter un, copie un bloc existant et modifie les champs. Les filtres, les cartes et les schémas se mettent à jour automatiquement.</p>
